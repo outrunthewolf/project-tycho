@@ -18,9 +18,9 @@ class GameScene {
     // Opponent - In this case evil aliens
     this.alien = { };
     this.alienHealth = 100;
-    this.alienAttackSpeed = 3;
+    this.alienAttackSpeed = 2;
     this.alienAttackArray = [ ];
-    this.alienAttackLength = 10;
+    this.alienAttackLength = 20;
     this.alienAttacks = [];
     this.alienScore = 0;
 
@@ -32,6 +32,7 @@ class GameScene {
     // When you defend against an attack
     this.defenseFlash = { };
     this.battleScene = { }; // Flashing background
+    this.explosion = { };
 
     // UI pieces
     this.pauseButton = { };
@@ -94,7 +95,7 @@ class GameScene {
       lastItem.alpha = 1;
       lastItem.y += this.alienAttackSpeed;
 
-      if (lastItem.y > 450) {
+      if (lastItem.y > (this.player.y - 50)) {
         // Here we should evaluate what the human has done
         switch(true) {
           case (lastItem.name == this.radialContainer.getCurrentPlayerAttack()):
@@ -181,8 +182,6 @@ class GameScene {
       const time = this.resources.backgroundBattleAnimated.spritesheet.data.frames[framekey].duration;
       textures.push({ texture, time });
     }
-
-    // Also draw the background in at the same time so we fade to it
     this.battleScene = new PIXI.AnimatedSprite(textures);
     this.battleScene.y = 0;
     this.battleScene.x = 0;
@@ -246,6 +245,28 @@ class GameScene {
     this.player.name = "player";
     this.backgroundHolder.addChild(this.player);
 
+    // Load in the explosion
+    const explosionTextures = [];
+    var arraySize = Object.keys(this.resources.explosionAnimated.spritesheet.data.frames).length;
+
+    for (var i = 0; i < arraySize; i++) {
+      const framekey = `background-explosion-animated ${i}.aseprite`;
+      const texture = PIXI.Texture.from(framekey);
+      const time = this.resources.explosionAnimated.spritesheet.data.frames[framekey].duration;
+      explosionTextures.push({ texture, time });
+    }
+    this.explosion = new PIXI.AnimatedSprite(explosionTextures);
+    this.explosion.y = 0;
+    this.explosion.x = 0;
+    this.explosion.height = 100;
+    this.explosion.width = 100;
+    this.explosion.vx = 0;
+    this.explosion.vy = 0;
+    this.explosion.alpha = 0;
+    this.explosion.loop = false;
+    this.explosion.animationSpeed = 5;
+    this.backgroundHolder.addChild(this.explosion);
+
     // White flash
     this.whiteFlash = new PIXI.Graphics();
     this.whiteFlash.lineStyle(4, 0xFF3300, 1);
@@ -261,10 +282,10 @@ class GameScene {
     this.defenseFlash = new PIXI.Graphics();
     this.defenseFlash.lineStyle(4, 0xFFFFFF, 1);
     this.defenseFlash.beginFill(0xFFFFFF);
-    this.defenseFlash.drawRect(0, 0, this.app.view.width, 2);
+    this.defenseFlash.drawRect(0, 0, 2, this.app.view.height);
     this.defenseFlash.endFill();
-    this.defenseFlash.x = 0;
-    this.defenseFlash.y = 450;
+    this.defenseFlash.x = (this.app.view.width / 2) - (this.defenseFlash.width / 2);
+    this.defenseFlash.y = 0;
     this.defenseFlash.alpha = 0;
     this.defenseFlash.name = "defenseFlash";
     this.backgroundHolder.addChild(this.defenseFlash);
@@ -358,6 +379,7 @@ class GameScene {
 
     // All loaded, lets animate everything in.
     this.radialContainer = new Radial(this.resources);
+    this.radialContainer.getRenderable().visible = false;
     this.backgroundHolder.addChild(this.radialContainer.getRenderable());
 
     // Do other stuff
@@ -371,6 +393,8 @@ class GameScene {
     // Fire event when we're ready to start everything
     document.body.addEventListener("readyToPlay", function (e) {
       that.ready = true;
+      that.radialContainer.setRadialDefenseY(that.player.y - 50);
+      that.radialContainer.getRenderable().visible = true;
       that.play();
     });
   }
@@ -400,7 +424,7 @@ class GameScene {
     }});
     // Wait for button press
 
-    tl.fromTo(this.player, {y: this.app.view.height + 700, alpha: 1}, {y: this.app.view.height - 200, alpha: 1, duration: 2 });
+    tl.fromTo(this.player, {y: this.app.view.height + 700, alpha: 1}, {y: this.app.view.height - 200, alpha: 1, duration: 2});
     tl.to(this.healthBar, {y: this.app.view.height - 230 + this.player.height, alpha: 1});
     tl.to(this.healthBarMask, {y: this.app.view.height - 228 + this.player.height, alpha: 1});
     tl.fromTo(this.alien, {y: 0, alpha: 0}, {y: 50, alpha: 1});
@@ -435,12 +459,17 @@ class GameScene {
    *
    */
   win() {
+    var that = this;
+
     document.body.dispatchEvent(new CustomEvent("win", {
       bubbles: true
     }));
 
     // Flash the barrier and shake the enemy
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
+    gsap.to(this.explosion, {alpha: 1, duration: 0, x: (this.app.view.width / 2) - (this.explosion.width / 2), y: this.alien.y, onComplete: function() {
+      that.explosion.gotoAndPlay(0);
+    }});
     tl.to(this.defenseFlash, { alpha: 1, duration: 0.1 });
     tl.to(this.defenseFlash, { alpha: 0, duration: 0.2 });
 
@@ -456,6 +485,8 @@ class GameScene {
    *
    */
   lose() {
+    var that = this;
+    
     document.body.dispatchEvent(new CustomEvent("lose", {
       bubbles: true
     }));
@@ -472,6 +503,9 @@ class GameScene {
 
     // Flash the player
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
+    gsap.to(this.explosion, {alpha: 1, duration: 0, x: (this.app.view.width / 2) - (this.explosion.width / 2), y: this.player.y, onComplete: function() {
+      that.explosion.gotoAndPlay(0);
+    }});
     tl.to(this.player, { tint: 0xFF9600, duration: 0.2 });
     tl.to(this.player, { tint: 0xFFFFFF, duration: 0.2 });
     gsap.to(this.player, this.shakeUpDownAnimation(this.player.y));

@@ -28,6 +28,7 @@ class LoadingScreen {
     this.loader.add('alienAnimated', 'resources/sprites/alien-animated.json');
     this.loader.add('backgroundFlashAnimated', 'resources/sprites/background-flash-animated.json');
     this.loader.add('moonAnimated', 'resources/sprites/background-moon-animated.json');
+    this.loader.add('explosionAnimated', 'resources/sprites/background-explosion-animated.json');
   }
 
   /**
