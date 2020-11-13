@@ -1,3 +1,3 @@
-# The Spacebar Challenge
+# Project Moonshot
 
-https://spacebar-challenge.netlify.com/
+A game built in PixiJS and Greensock for the #GitHubGameOff 2020
