@@ -15,11 +15,26 @@ class GameScene {
     this.player = { };
     this.playerHealth = 6;
     this.playerAttack = { };
+<<<<<<< Updated upstream
+=======
+    this.playerScore = 0;
+    this.playerScoreText = { };
+    this.playerExplosion = { };
+>>>>>>> Stashed changes
 
     // Opponent - In this case evil aliens
     this.alien = { };
     this.alienHealth = 100;
+<<<<<<< Updated upstream
     this.alienAttackSpeed = 3;
+=======
+    this.alienAttackSpeed = 2;
+    this.alienAttackArray = [ ];
+    this.alienAttackLength = 20;
+    this.alienAttacks = [];
+    this.alienScore = 0;
+    this.alienExplosion = { };
+>>>>>>> Stashed changes
 
     // Scene resources
     // This is a fullscreen page flash of white
@@ -28,6 +43,10 @@ class GameScene {
     // This is a neat white line that flashes
     // When you defend against an attack
     this.defenseFlash = { };
+<<<<<<< Updated upstream
+=======
+    this.battleScene = { }; // Flashing background
+>>>>>>> Stashed changes
 
     // UI pieces
     this.pauseButton = { };
@@ -260,17 +279,49 @@ class GameScene {
     this.player.name = "player";
     this.backgroundHolder.addChild(this.player);
 
-    // Load in the player
-    // this.player = new PIXI.Sprite(this.resources.avatarRock.texture);
-    // this.player.y = 900;
-    // this.player.x = -100;
-    // this.player.height = 75;
-    // this.player.width = 75;
-    // this.player.vx = 0;
-    // this.player.vy = 0;
-    // this.player.tint = '0xFF9600';
-    // this.player.alpha = 0;
-    // this.backgroundHolder.addChild(this.player);
+    // Load in the alien explosion
+    const alienExplosionTextures = [];
+    var arraySize = Object.keys(this.resources.explosionAnimated.spritesheet.data.frames).length;
+
+    for (var i = 0; i < arraySize; i++) {
+      const framekey = `background-explosion-animated ${i}.aseprite`;
+      const texture = PIXI.Texture.from(framekey);
+      const time = this.resources.explosionAnimated.spritesheet.data.frames[framekey].duration;
+      alienExplosionTextures.push({ texture, time });
+    }
+    this.alienExplosion = new PIXI.AnimatedSprite(alienExplosionTextures);
+    this.alienExplosion.y = 0;
+    this.alienExplosion.x = 0;
+    this.alienExplosion.height = 100;
+    this.alienExplosion.width = 100;
+    this.alienExplosion.vx = 0;
+    this.alienExplosion.vy = 0;
+    this.alienExplosion.alpha = 0;
+    this.alienExplosion.loop = false;
+    this.alienExplosion.animationSpeed = 5;
+    this.backgroundHolder.addChild(this.alienExplosion);
+
+    // Load in the player explosion
+    const playerExplosionTextures = [];
+    var arraySize = Object.keys(this.resources.explosionVerticalAnimated.spritesheet.data.frames).length;
+
+    for (var i = 0; i < arraySize; i++) {
+      const framekey = `background-explosion-vertical-animated ${i}.aseprite`;
+      const texture = PIXI.Texture.from(framekey);
+      const time = this.resources.explosionVerticalAnimated.spritesheet.data.frames[framekey].duration;
+      playerExplosionTextures.push({ texture, time });
+    }
+    this.playerExplosion = new PIXI.AnimatedSprite(playerExplosionTextures);
+    this.playerExplosion.y = 0;
+    this.playerExplosion.x = 0;
+    this.playerExplosion.height = 150;
+    this.playerExplosion.width = 150;
+    this.playerExplosion.vx = 0;
+    this.playerExplosion.vy = 0;
+    this.playerExplosion.alpha = 0;
+    this.playerExplosion.loop = false;
+    this.playerExplosion.animationSpeed = 5;
+    this.backgroundHolder.addChild(this.playerExplosion);
 
     // White flash
     this.whiteFlash = new PIXI.Graphics();
@@ -344,43 +395,39 @@ class GameScene {
     // Intro storyboard
     this.backgroundStoryHolder = new PIXI.Container();
 
-    this.introStory1 = new PIXI.Sprite(this.resources.backgroundStoryIntro1.texture);
-    this.introStory1.height = this.app.view.height;
-    this.introStory1.width = this.app.view.width;
-    this.introStory1.x = 0;
+    this.introStory1 = new IntroRules(this.app, this.loader, this.resources); //PIXI.Sprite(this.resources.backgroundStoryIntro1.texture);
     this.introStory1.y = 0;
     this.introStory1.vx = 0;
     this.introStory1.vy = 0;
     this.introStory1.alpha = 1;
+    this.introStory1.x = (this.app.view.width / 2) - (this.introStory1.width / 2);
     this.backgroundStoryHolder.addChild(this.introStory1);
-
-    this.introStory2 = new PIXI.Sprite(this.resources.backgroundStoryIntro2.texture);
-    this.introStory2.height = this.app.view.height;
-    this.introStory2.width = this.app.view.width;
-    this.introStory2.x = 0;
-    this.introStory2.y = 0;
-    this.introStory2.vx = 0;
-    this.introStory2.vy = 0;
-    this.introStory2.alpha = 0;
-    this.backgroundStoryHolder.addChild(this.introStory2);
-
-    this.introStory3 = new PIXI.Sprite(this.resources.backgroundStoryIntro3.texture);
-    this.introStory3.height = this.app.view.height;
-    this.introStory3.width = this.app.view.width;
-    this.introStory3.x = 0;
-    this.introStory3.y = 0;
-    this.introStory3.vx = 0;
-    this.introStory3.vy = 0;
-    this.introStory3.alpha = 0;
-    this.backgroundStoryHolder.addChild(this.introStory3);
+    //
+    // this.introStory2 = new PIXI.Sprite(this.resources.backgroundStoryIntro2.texture);
+    // this.introStory2.height = this.app.view.height;
+    // this.introStory2.width = this.app.view.width;
+    // this.introStory2.x = 0;
+    // this.introStory2.y = 0;
+    // this.introStory2.vx = 0;
+    // this.introStory2.vy = 0;
+    // this.introStory2.alpha = 0;
+    // this.backgroundStoryHolder.addChild(this.introStory2);
+    //
+    // this.introStory3 = new PIXI.Sprite(this.resources.backgroundStoryIntro3.texture);
+    // this.introStory3.height = this.app.view.height;
+    // this.introStory3.width = this.app.view.width;
+    // this.introStory3.x = 0;
+    // this.introStory3.y = 0;
+    // this.introStory3.vx = 0;
+    // this.introStory3.vy = 0;
+    // this.introStory3.alpha = 0;
+    // this.backgroundStoryHolder.addChild(this.introStory3);
 
     this.skipButton = new ButtonSmallSkip(this.resources);
     this.skipButton.x = this.app.view.width - 20 - this.skipButton.width;
-    this.skipButton.y = this.app.view.height - 20 - this.skipButton.height;
+    this.skipButton.y = 20;
     this.backgroundStoryHolder.addChild(this.skipButton);
-
     this.backgroundHolder.addChild(this.backgroundStoryHolder);
-    //
 
     // All loaded, lets animate everything in.
     this.radialContainer = new Radial(this.resources);
@@ -417,10 +464,10 @@ class GameScene {
 
     // Load a black screen
     tl.to(this.introStory1, {alpha:1, duration: 1}).addLabel("intro1");
-    tl.to(this.introStory2, {alpha:1, duration: 1}, "=+3").addLabel("intro2");
-    tl.to(this.introStory3, {alpha: 1, duration: 1}, "=+4").addLabel("intro3");
+    // tl.to(this.introStory2, {alpha:1, duration: 1}, "=+3").addLabel("intro2");
+    // tl.to(this.introStory3, {alpha: 1, duration: 1}, "=+4").addLabel("intro3");
 
-    tl.to(this.backgroundStoryHolder, {alpha: 0, duration: 2}, "=+4").addLabel("startGame");
+    tl.to(this.backgroundStoryHolder, {alpha: 0, duration: 4}, "=+4").addLabel("startGame");
     tl.to(this.backgroundStoryHolder, {visible: false, duration: 0});
     tl.to(this.skipButton, {visible: false, duration: 0, onComplete: function() {
       that.backgroundStoryHolder.destroy();
@@ -435,12 +482,12 @@ class GameScene {
     tl.to(this.whiteFlash, {alpha: 1, duration: 0});
     tl.to(this.battleScene, {alpha: 1, duration: 0});
 
-    // Do some work
-    this.step = this.healthBar.width / this.playerHealth;
-    this.battleScene.play();
-    this.alien.play();
-
     tl.to(this.whiteFlash, {alpha: 0, duration: 2, onComplete: function() {
+
+      that.step = that.healthBar.width / that.playerHealth;
+      that.battleScene.play();
+      that.alien.play();
+
       document.body.dispatchEvent(new CustomEvent("readyToPlay", {
         bubbles: true
       }));
@@ -468,6 +515,12 @@ class GameScene {
 
     // Flash the barrier and shake the enemy
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
+<<<<<<< Updated upstream
+=======
+    gsap.to(this.alienExplosion, {alpha: 1, duration: 0, x: (this.app.view.width / 2) - (this.alienExplosion.width / 2), y: this.alien.y, onComplete: function() {
+      that.alienExplosion.gotoAndPlay(0);
+    }});
+>>>>>>> Stashed changes
     tl.to(this.defenseFlash, { alpha: 1, duration: 0.1 });
     tl.to(this.defenseFlash, { alpha: 0, duration: 0.2 });
 
@@ -483,6 +536,11 @@ class GameScene {
    *
    */
   lose() {
+<<<<<<< Updated upstream
+=======
+    var that = this;
+
+>>>>>>> Stashed changes
     document.body.dispatchEvent(new CustomEvent("lose", {
       bubbles: true
     }));
@@ -499,6 +557,12 @@ class GameScene {
 
     // Flash the player
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
+<<<<<<< Updated upstream
+=======
+    gsap.to(this.playerExplosion, {alpha: 1, duration: 0, x: (this.app.view.width / 2) - (this.playerExplosion.width / 2), y: this.player.y - 15, onComplete: function() {
+      that.playerExplosion.gotoAndPlay(0);
+    }});
+>>>>>>> Stashed changes
     tl.to(this.player, { tint: 0xFF9600, duration: 0.2 });
     tl.to(this.player, { tint: 0xFFFFFF, duration: 0.2 });
     gsap.to(this.player, this.shakeUpDownAnimation(this.player.y));

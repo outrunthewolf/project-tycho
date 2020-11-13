@@ -3,14 +3,14 @@
 class ButtonLarge {
   constructor(resources, text) {
 
-    var height = 94;
-    var width = 242;
+    var height = 84;
+    var width = 232;
 
     // Button Text
     if (text) {
       var buttonText = new PIXI.Text(text, new PIXI.TextStyle({
         fontFamily: "emery",
-        fontSize: 50,
+        fontSize: 40,
         fill: '#f0f0c9',
         stroke: '#000',
         strokeThickness: 1

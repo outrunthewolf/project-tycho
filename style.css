@@ -15,8 +15,19 @@ body {
     font-weight: bold;
 }
 
-.loadFont {
+@font-face {
+    font-family: "patlabour";
+    src: url("resources/fonts/patlabour.woff") format('woff');
+    font-weight: bold;
+}
+
+.loadFont-emery {
   font-family: "emery";
+  font-size: 10px;
+  visibility: hidden;
+}
+.loadFont-patlabour {
+  font-family: "patlabour";
   font-size: 10px;
   visibility: hidden;
 }

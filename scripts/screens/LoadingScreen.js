@@ -8,6 +8,8 @@ class LoadingScreen {
     this.resources = { };
 
     // Load any static images
+    this.loader.add('backgroundPrimary', 'resources/images/background-primary.png');
+    this.loader.add('backgroundRules', 'resources/images/background-rules.png');
     this.loader.add('btnPrimaryLarge', 'resources/images/btn-primary-up.png');
     this.loader.add('btnPrimarySmall', 'resources/images/btn-primary-small.png');
     this.loader.add('btnPrimarySmallPause', 'resources/images/btn-primary-small-pause.png');
@@ -28,6 +30,11 @@ class LoadingScreen {
     this.loader.add('alienAnimated', 'resources/sprites/alien-animated.json');
     this.loader.add('backgroundFlashAnimated', 'resources/sprites/background-flash-animated.json');
     this.loader.add('moonAnimated', 'resources/sprites/background-moon-animated.json');
+<<<<<<< Updated upstream
+=======
+    this.loader.add('explosionAnimated', 'resources/sprites/background-explosion-animated.json');
+    this.loader.add('explosionVerticalAnimated', 'resources/sprites/background-explosion-vertical-animated.json');
+>>>>>>> Stashed changes
   }
 
   /**
