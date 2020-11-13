@@ -1,0 +1,43 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: #303030;
+  display: flex;
+}
+
+@font-face {
+    font-family: "emery";
+    src: url("resources/fonts/emery.woff") format('woff');
+    font-weight: bold;
+}
+
+.loadFont {
+  font-family: "emery";
+  font-size: 10px;
+  visibility: hidden;
+}
+
+#container {
+  width: 355px;
+  height: 585px;
+  margin-top: 20px;
+  margin-right: auto;
+  margin-left: auto;
+  background: black;
+  border: solid 1px white;
+  background-image: url("resources/images/background-primary.png");
+  background-position: center;
+  box-shadow: 0px 0px 100px 5px white;
+}
+
+/* To prevent wierd values when clicking
+on the svg instead of the container,
+you can set pointer events none
+on the generated graphics */
+.no-pointer {
+  pointer-events: none;
+}
