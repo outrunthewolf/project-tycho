@@ -8,18 +8,21 @@ class GameScene {
     this.loader = loader;
     this.resources = resources;
 
-    this.scoreText = { };
-
-
     // Player Stuff - In this case the player is the moon
     this.player = { };
     this.playerHealth = 6;
     this.playerAttack = { };
+    this.playerScore = 0;
+    this.playerScoreText = { };
 
     // Opponent - In this case evil aliens
     this.alien = { };
     this.alienHealth = 100;
     this.alienAttackSpeed = 3;
+    this.alienAttackArray = [ ];
+    this.alienAttackLength = 10;
+    this.alienAttacks = [];
+    this.alienScore = 0;
 
     // Scene resources
     // This is a fullscreen page flash of white
@@ -28,28 +31,14 @@ class GameScene {
     // This is a neat white line that flashes
     // When you defend against an attack
     this.defenseFlash = { };
+    this.battleScene = { }; // Flashing background
 
     // UI pieces
     this.pauseButton = { };
     this.healthBarMask = { };
     this.healthBar = { };
     this.healthBarStep = 0; // Mask step
-
-    this.opponent = { };
-    this.battleScene = { };
-    this.attackArray = [ ];
-    this.attackLength = 10;
-    this.attacks = [ ];
-
-    this.alienScore = 0;
-    this.playerScore = 0;
-
-    // Radial
     this.radialContainer = { };
-
-    // Battle animation objects
-    this.opponentAnimation = { };
-    this.playerAnimation = { };
 
     // Story board stuff
     this.storyIntro1 = { };
@@ -61,14 +50,12 @@ class GameScene {
     this.ready = false;
     this.gameOver = false;
     this.gameOverDispatched = false;
-
-    this.attacks = [];
   }
 
   /**
    *
    */
-  generateAttackArray() {
+  generateAlienAttackArray() {
     var pool = [
       {
         name: "rock",
@@ -84,7 +71,7 @@ class GameScene {
 
     var arr = [ ];
 
-    for (var i = 0; i < this.attackLength; i++) {
+    for (var i = 0; i < this.alienAttackLength; i++) {
          var randomChar = pool[Math.floor(Math.random() * pool.length)];
          arr.push(randomChar);
     }
@@ -101,9 +88,9 @@ class GameScene {
     if (this.paused == true) return;
 
     // Start firing the attack things down
-    if(this.playerHealth > 0 && this.attacks.length > 0) {
+    if(this.playerHealth > 0 && this.alienAttacks.length > 0) {
 
-      var lastItem = this.attacks[this.attacks.length - 1];
+      var lastItem = this.alienAttacks[this.alienAttacks.length - 1];
       lastItem.alpha = 1;
       lastItem.y += this.alienAttackSpeed;
 
@@ -135,10 +122,10 @@ class GameScene {
             this.lose();
         }
 
-        this.attacks[this.attacks.length - 1].destroy();
-        this.attacks.splice(this.attacks.length - 1, 1);
+        this.alienAttacks[this.alienAttacks.length - 1].destroy();
+        this.alienAttacks.splice(this.alienAttacks.length - 1, 1);
 
-        this.scoreText.text = this.playerScore;
+        this.playerScoreText.text = this.playerScore;
       }
     }else{
       let that = this;
@@ -182,7 +169,7 @@ class GameScene {
     this.stage.addChild(this.backgroundHolder);
 
     // Load all the stuff we need
-    this.attackArray = this.generateAttackArray();
+    this.alienAttackArray = this.generateAlienAttackArray();
 
     // Load in the animate background
     const textures = [];
@@ -225,17 +212,16 @@ class GameScene {
     this.alien.vx = 0;
     this.alien.vy = 0;
 
-
     // Load the aliens attack
-    for (i = 0; i < this.attackArray.length; i++) {
-      this.attacks[i] = new PIXI.Sprite(this.resources[this.attackArray[i].texture].texture);
-      this.attacks[i].width = 40;
-      this.attacks[i].height = 40;
-      this.attacks[i].x = (this.app.view.width / 2) - (this.attacks[i].width / 2);
-      this.attacks[i].y = 55;
-      this.attacks[i].alpha = 0;
-      this.attacks[i].name = this.attackArray[i].name;
-      this.backgroundHolder.addChild(this.attacks[i]);
+    for (i = 0; i < this.alienAttackArray.length; i++) {
+      this.alienAttacks[i] = new PIXI.Sprite(this.resources[this.alienAttackArray[i].texture].texture);
+      this.alienAttacks[i].width = 40;
+      this.alienAttacks[i].height = 40;
+      this.alienAttacks[i].x = (this.app.view.width / 2) - (this.alienAttacks[i].width / 2);
+      this.alienAttacks[i].y = 55;
+      this.alienAttacks[i].alpha = 0;
+      this.alienAttacks[i].name = this.alienAttackArray[i].name;
+      this.backgroundHolder.addChild(this.alienAttacks[i]);
     }
     this.backgroundHolder.addChild(this.alien);
 
@@ -259,18 +245,6 @@ class GameScene {
     this.player.vy = 0;
     this.player.name = "player";
     this.backgroundHolder.addChild(this.player);
-
-    // Load in the player
-    // this.player = new PIXI.Sprite(this.resources.avatarRock.texture);
-    // this.player.y = 900;
-    // this.player.x = -100;
-    // this.player.height = 75;
-    // this.player.width = 75;
-    // this.player.vx = 0;
-    // this.player.vy = 0;
-    // this.player.tint = '0xFF9600';
-    // this.player.alpha = 0;
-    // this.backgroundHolder.addChild(this.player);
 
     // White flash
     this.whiteFlash = new PIXI.Graphics();
@@ -308,14 +282,14 @@ class GameScene {
     });
 
     // Score
-    this.scoreText = new PIXI.Text("0", new PIXI.TextStyle({
+    this.playerScoreText = new PIXI.Text("0", new PIXI.TextStyle({
       fontFamily: "arial",
       fontSize: 50,
       fill: '#FFFFFF'
     }));
-    this.scoreText.x = 0;
-    this.scoreText.y = 0;
-    this.backgroundHolder.addChild(this.scoreText);
+    this.playerScoreText.x = 0;
+    this.playerScoreText.y = 0;
+    this.backgroundHolder.addChild(this.playerScoreText);
 
     // player Health
     this.healthBar = new PIXI.Sprite(this.resources.healthBar.texture);
@@ -387,7 +361,6 @@ class GameScene {
     this.backgroundHolder.addChild(this.radialContainer.getRenderable());
 
     // Do other stuff
-    this.loadAnimationObjects();
     this.animate();
 
     // Fire event when we're ready to start everything
@@ -507,14 +480,6 @@ class GameScene {
   /**
    *
    */
-  loadAnimationObjects() {
-    this.opponentAnimation = {x: (this.app.view.width / 2) - (this.opponent.width / 2) + 15, y: (this.app.view.height / 2) - (this.opponent.height / 2) - 30, duration: 0.5, ease: "power4.in"};
-    this.playerAnimation = {x: (this.app.view.width / 2) - (this.player.width / 2) - 15, y: (this.app.view.height / 2) - (this.player.height / 2) + 30, duration: 0.5, ease: "power4.in"};
-  }
-
-  /**
-   *
-   */
   shakeUpDownAnimation(y) {
     return { keyframes: [{
           y: y + 25,
@@ -567,13 +532,6 @@ class GameScene {
       this.battleScene.stop();
       this.alien.stop();
     }
-  }
-
-  /**
-   * Replay the animations
-   */
-  replay() {
-    this.destroy();
   }
 
   /**
