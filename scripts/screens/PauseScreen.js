@@ -52,9 +52,9 @@ class PauseScreen {
     this.menuHolder.addChild(scoreText);
 
     // Play Button
-    const returnButton = new Button(this.resources, "Resume", 75, 150, "exitSettingsButton");
+    const returnButton = new ButtonLarge(this.resources, "Resume");
     returnButton.x = (this.app.view.width / 2) - (returnButton.width / 2);
-    returnButton.y = 575;
+    returnButton.y = this.app.view.height - 300;
     this.menuHolder.addChild(returnButton);
 
     returnButton.on('pointerdown', function (e) {
@@ -67,9 +67,9 @@ class PauseScreen {
     });
 
     // Restart Button
-    var restartButton = new Button(this.resources, "End Game", 75, 150, "endGameButton");
+    var restartButton = new ButtonLarge(this.resources, "End Game");
     restartButton.x = (this.app.view.width / 2) - (restartButton.width / 2);
-    restartButton.y = 670;
+    restartButton.y = returnButton.y + 95;
     this.menuHolder.addChild(restartButton);
 
     restartButton.on('pointerdown', function (e) {

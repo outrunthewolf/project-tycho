@@ -51,6 +51,7 @@ loader.onComplete.once((loaderObject, assetsObject) => {
 function loadScenes() {
   let menuScreen = new MainMenuScreen(app, loader, resources);
   let settingsScreen = new SettingsScreen(app, loader, resources);
+  let howToPlayScreen = new RulesScreen(app, loader, resources);
   let gameOverScreen = new GameOverScreen(app, loader, resources);
   let pauseScreen = new PauseScreen(app, loader, resources);
   let gameScene = { };
@@ -72,6 +73,14 @@ function loadScenes() {
   // Screen: Settings
   document.body.addEventListener("event:showsettings", function (e) {
     settingsScreen.render();
+    app.stage.sortChildren();
+
+    e.detail.scene.destroy();
+  });
+
+  // Screen: How to play
+  document.body.addEventListener("event:howtoplay", function (e) {
+    howToPlayScreen.render();
     app.stage.sortChildren();
 
     e.detail.scene.destroy();
@@ -102,11 +111,11 @@ function loadScenes() {
   // Screen: Settings
   document.body.addEventListener("event:togglepausegame", function (e) {
     if(pause == true) {
-      //e.detail.scene.destroy();
+      e.detail.scene.destroy();
       gameScene.togglePause();
       pause = false;
     }else{
-      //pauseScreen.render(gameScene.playerScore);
+      pauseScreen.render(gameScene.playerScore);
       gameScene.togglePause();
       pause = true;
     }

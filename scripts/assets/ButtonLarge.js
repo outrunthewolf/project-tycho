@@ -10,7 +10,7 @@ class ButtonLarge {
     if (text) {
       var buttonText = new PIXI.Text(text, new PIXI.TextStyle({
         fontFamily: "emery",
-        fontSize: 40,
+        fontSize: 43,
         fill: '#f0f0c9',
         stroke: '#000',
         strokeThickness: 1
@@ -28,7 +28,7 @@ class ButtonLarge {
     button.alpha = 1;
 
     // Centre text in button
-    buttonText.x = (button.width / 2) - (buttonText.width / 2);
+    buttonText.x = (button.width / 2) - (buttonText.width / 2) + 5;
     buttonText.y = (button.height / 2) - (buttonText.height / 2);
     button.addChild(buttonText);
 

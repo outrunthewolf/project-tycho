@@ -15,7 +15,7 @@ class LoadingScreen {
     this.loader.add('btnPrimarySmallPause', 'resources/images/btn-primary-small-pause.png');
     this.loader.add('btnPrimarySmallSkip', 'resources/images/btn-primary-small-skip.png');
     this.loader.add('avatarRock', 'resources/images/rock.png');
-    this.loader.add('avatarPaper', 'resources/images/paper.png');
+    this.loader.add('avatarPaper', 'resources/images/radial-bg-paper.png');
     this.loader.add('avatarScissors', 'resources/images/scissors.png');
     this.loader.add('backgroundMoon', 'resources/images/background-moon.png');
     this.loader.add('healthBar', 'resources/images/health-bar.png');
@@ -30,11 +30,8 @@ class LoadingScreen {
     this.loader.add('alienAnimated', 'resources/sprites/alien-animated.json');
     this.loader.add('backgroundFlashAnimated', 'resources/sprites/background-flash-animated.json');
     this.loader.add('moonAnimated', 'resources/sprites/background-moon-animated.json');
-<<<<<<< Updated upstream
-=======
     this.loader.add('explosionAnimated', 'resources/sprites/background-explosion-animated.json');
     this.loader.add('explosionVerticalAnimated', 'resources/sprites/background-explosion-vertical-animated.json');
->>>>>>> Stashed changes
   }
 
   /**

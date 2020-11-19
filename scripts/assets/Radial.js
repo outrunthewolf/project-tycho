@@ -20,7 +20,7 @@ class Radial {
     ];
 
     this.attackRadial = false;
-    window.app = app;
+    this.app = window.app;
 
     // Pixi container
     this.radialContainer = new PIXI.Container();
@@ -32,18 +32,37 @@ class Radial {
     var that = this;
 
     // How many items?
+    var bgcircle = new PIXI.Graphics();
+    bgcircle.beginFill(0x222034);
+    bgcircle.alpha = 0.5;
+    bgcircle.drawCircle(0, 30, 100); // cx, cy, radius, startAngle, endAngle
+    this.radialContainer.addChild(bgcircle);
+
+    var semicircleL = new PIXI.Graphics();
+    semicircleL.lineStyle(2, 0xf0f0c9);
+    semicircleL.arc(0, 35, 60, 2.8, 6.6); // cx, cy, radius, startAngle, endAngle
+    semicircleL.x = (semicircleL.width/2) + 30 - 1;
+    this.radialContainer.addChild(semicircleL);
+
+    bgcircle.x = (semicircleL.width/2) + 30 - 5;
+
+    var circle = new PIXI.Graphics();
+    circle.lineStyle(5, 0xf0f0c9);
+    circle.drawCircle(0, 30, 10); // cx, cy, radius, startAngle, endAngle
+    circle.x = (semicircleL.width/2) + 30 - 2.5;
+    this.radialContainer.addChild(circle);
 
     // Load in the radial
     for (var i = 0; i < this.radialItems.length; i++) {
       //let radial = new PIXI.Graphics();
-      let radial = new PIXI.Sprite(resources[this.radialItems[i].texture].texture);
+      let radial = new PIXI.Sprite(resources.avatarPaper.texture);
       let radialY = 0;
-      if (i == 1) radialY = -80;
+      if (i == 1) radialY = -60;
 
-      radial.x = (80 * i);
+      radial.x = (60 * i);
       radial.y = radialY;
-      radial.width = 40;
-      radial.height = 40;
+      radial.width = 60;
+      radial.height = 60;
       radial.interactive = true;
       radial.name = this.radialItems[i].name;
       radial.metaTexture = this.radialItems[i].texture;
@@ -52,8 +71,8 @@ class Radial {
       radial.on('pointerup', function(e) {
         that.attackRadial = new PIXI.Sprite(resources[e.target.metaTexture].texture);
         that.attackRadial.y = 440;
-        that.attackRadial.width = 40;
-        that.attackRadial.height = 40;
+        that.attackRadial.width = 60;
+        that.attackRadial.height = 60;
         that.attackRadial.x = (app.view.width / 2) - (that.attackRadial.width / 2);
         that.attackRadial.name = e.target.name;
 
@@ -67,8 +86,8 @@ class Radial {
     }
 
     app.renderer.plugins.interaction.on('pointerdown', function(event) {
-      that.radialContainer.x = event.data.global.x - (that.radialContainer.width / 2) + 20;
-      that.radialContainer.y = event.data.global.y;
+      that.radialContainer.x = event.data.global.x;// - (that.radialContainer.width / 2);
+      that.radialContainer.y = event.data.global.y - 30;
       that.radialContainer.visible = true;
 
       if(that.attackRadial) {

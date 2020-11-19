@@ -15,26 +15,19 @@ class GameScene {
     this.player = { };
     this.playerHealth = 6;
     this.playerAttack = { };
-<<<<<<< Updated upstream
-=======
     this.playerScore = 0;
     this.playerScoreText = { };
     this.playerExplosion = { };
->>>>>>> Stashed changes
 
     // Opponent - In this case evil aliens
     this.alien = { };
     this.alienHealth = 100;
-<<<<<<< Updated upstream
-    this.alienAttackSpeed = 3;
-=======
     this.alienAttackSpeed = 2;
     this.alienAttackArray = [ ];
     this.alienAttackLength = 20;
     this.alienAttacks = [];
     this.alienScore = 0;
     this.alienExplosion = { };
->>>>>>> Stashed changes
 
     // Scene resources
     // This is a fullscreen page flash of white
@@ -43,10 +36,7 @@ class GameScene {
     // This is a neat white line that flashes
     // When you defend against an attack
     this.defenseFlash = { };
-<<<<<<< Updated upstream
-=======
     this.battleScene = { }; // Flashing background
->>>>>>> Stashed changes
 
     // UI pieces
     this.pauseButton = { };
@@ -439,7 +429,7 @@ class GameScene {
 
     // Fire event when we're ready to start everything
     document.body.addEventListener("playerAttackDropped", function (e) {
-      gsap.to(that.battleScene, that.shakeLeftRightAnimation(that.battleScene.y));
+      //gsap.to(that.battleScene, that.shakeLeftRightAnimation(that.battleScene.y));
     });
 
     // Fire event when we're ready to start everything
@@ -509,18 +499,17 @@ class GameScene {
    *
    */
   win() {
+    var that = this;
+
     document.body.dispatchEvent(new CustomEvent("win", {
       bubbles: true
     }));
 
     // Flash the barrier and shake the enemy
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
-<<<<<<< Updated upstream
-=======
     gsap.to(this.alienExplosion, {alpha: 1, duration: 0, x: (this.app.view.width / 2) - (this.alienExplosion.width / 2), y: this.alien.y, onComplete: function() {
       that.alienExplosion.gotoAndPlay(0);
     }});
->>>>>>> Stashed changes
     tl.to(this.defenseFlash, { alpha: 1, duration: 0.1 });
     tl.to(this.defenseFlash, { alpha: 0, duration: 0.2 });
 
@@ -536,11 +525,7 @@ class GameScene {
    *
    */
   lose() {
-<<<<<<< Updated upstream
-=======
     var that = this;
-
->>>>>>> Stashed changes
     document.body.dispatchEvent(new CustomEvent("lose", {
       bubbles: true
     }));
@@ -557,12 +542,9 @@ class GameScene {
 
     // Flash the player
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
-<<<<<<< Updated upstream
-=======
     gsap.to(this.playerExplosion, {alpha: 1, duration: 0, x: (this.app.view.width / 2) - (this.playerExplosion.width / 2), y: this.player.y - 15, onComplete: function() {
       that.playerExplosion.gotoAndPlay(0);
     }});
->>>>>>> Stashed changes
     tl.to(this.player, { tint: 0xFF9600, duration: 0.2 });
     tl.to(this.player, { tint: 0xFFFFFF, duration: 0.2 });
     gsap.to(this.player, this.shakeUpDownAnimation(this.player.y));

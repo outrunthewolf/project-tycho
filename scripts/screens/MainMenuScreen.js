@@ -77,7 +77,7 @@ class MainMenuScreen {
     // Play Button
     const playButton = new ButtonLarge(this.resources, "Play");
     playButton.x = (this.app.view.width / 2) - (playButton.width / 2);
-    playButton.y = this.app.view.height - 230;
+    playButton.y = this.app.view.height - 300;
     this.menuHolder.addChild(playButton);
 
     playButton.on('pointerdown', function (e) {
@@ -89,10 +89,25 @@ class MainMenuScreen {
       }));
     });
 
+    // How to play
+    const howButton = new ButtonLarge(this.resources, "How to Play");
+    howButton.x = (this.app.view.width / 2) - (playButton.width / 2);
+    howButton.y = playButton.y + 95;
+    this.menuHolder.addChild(howButton);
+
+    howButton.on('pointerdown', function (e) {
+      document.body.dispatchEvent(new CustomEvent("event:howtoplay", {
+        bubbles: true,
+        detail: {
+          scene: that
+        }
+      }));
+    });
+
     // Settings Button
     const settingsButton = new ButtonLarge(this.resources, "Settings");
     settingsButton.x = (this.app.view.width / 2) - (settingsButton.width / 2);
-    settingsButton.y = playButton.y + 95;
+    settingsButton.y = howButton.y + 95;
     this.menuHolder.addChild(settingsButton);
 
     settingsButton.on('pointerdown', function (e) {
