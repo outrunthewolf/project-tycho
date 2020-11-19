@@ -4,6 +4,7 @@ class Radial {
   constructor(resources) {
 
     this.currentPlayerAttack = "";
+    this.radialDefenseY = 440;
 
     //
     this.radialItems = [
@@ -70,9 +71,9 @@ class Radial {
 
       radial.on('pointerup', function(e) {
         that.attackRadial = new PIXI.Sprite(resources[e.target.metaTexture].texture);
-        that.attackRadial.y = 440;
-        that.attackRadial.width = 60;
-        that.attackRadial.height = 60;
+        that.attackRadial.y = that.radialDefenseY;
+        that.attackRadial.width = 40;
+        that.attackRadial.height = 40;
         that.attackRadial.x = (app.view.width / 2) - (that.attackRadial.width / 2);
         that.attackRadial.name = e.target.name;
 
@@ -111,6 +112,14 @@ class Radial {
    getRenderable() {
      return this.radialContainer;
    }
+
+   /**
+    *
+    */
+  setRadialDefenseY(y) {
+    console.log(y);
+    this.radialDefenseY = y;
+  }
 
   /**
    *
