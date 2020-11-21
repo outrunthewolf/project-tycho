@@ -20,6 +20,16 @@ class LoadingScreen {
     this.loader.add('backgroundMoon', 'resources/images/background-moon.png');
     this.loader.add('healthBar', 'resources/images/health-bar.png');
 
+    // Radial icons
+    this.loader.add('radialIconRock', 'resources/images/radial-icon-rock.png');
+    this.loader.add('radialIconPaper', 'resources/images/radial-icon-paper.png');
+    this.loader.add('radialIconScissors', 'resources/images/radial-icon-scissors.png');
+
+    // Attack icons
+    this.loader.add('attackIconRock', 'resources/images/attack-icon-rock.png');
+    this.loader.add('attackIconPaper', 'resources/images/attack-icon-paper.png');
+    this.loader.add('attackIconScissors', 'resources/images/attack-icon-scissors.png');
+
     // Storyboard stuff
     this.loader.add('backgroundStoryIntro1', 'resources/storyboard/background-story-intro1.jpg');
     this.loader.add('backgroundStoryIntro2', 'resources/storyboard/background-story-intro2.jpg');

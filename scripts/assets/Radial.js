@@ -4,19 +4,23 @@ class Radial {
   constructor(resources) {
 
     this.currentPlayerAttack = "";
+    this.currentPlayerAttackObject = { };
     this.radialDefenseY = 440;
 
     //
     this.radialItems = [
       {
         name: "rock",
-        texture: "avatarRock"
+        radialTexture: "radialIconRock",
+        attackTexture: "attackIconRock"
       },{
         name: "scissors",
-        texture: "avatarScissors"
+        radialTexture: "radialIconScissors",
+        attackTexture: "attackIconScissors"
       },{
         name: "paper",
-        texture: "avatarPaper"
+        radialTexture: "radialIconPaper",
+        attackTexture: "attackIconPaper"
       }
     ];
 
@@ -56,7 +60,8 @@ class Radial {
     // Load in the radial
     for (var i = 0; i < this.radialItems.length; i++) {
       //let radial = new PIXI.Graphics();
-      let radial = new PIXI.Sprite(resources.avatarPaper.texture);
+      var radialIconTexture = this.radialItems[i].radialTexture;
+      let radial = new PIXI.Sprite(resources[radialIconTexture].texture);
       let radialY = 0;
       if (i == 1) radialY = -60;
 
@@ -66,7 +71,7 @@ class Radial {
       radial.height = 60;
       radial.interactive = true;
       radial.name = this.radialItems[i].name;
-      radial.metaTexture = this.radialItems[i].texture;
+      radial.metaTexture = this.radialItems[i].attackTexture;
       this.radialContainer.addChild(radial);
 
       radial.on('pointerup', function(e) {
@@ -78,6 +83,7 @@ class Radial {
         that.attackRadial.name = e.target.name;
 
         app.stage.addChild(that.attackRadial);
+        that.currentPlayerAttackObject = that.attackRadial;
         that.currentPlayerAttack = e.target.name;
 
         document.body.dispatchEvent(new CustomEvent("playerAttackDropped", {
@@ -87,7 +93,7 @@ class Radial {
     }
 
     app.renderer.plugins.interaction.on('pointerdown', function(event) {
-      that.radialContainer.x = event.data.global.x;// - (that.radialContainer.width / 2);
+      that.radialContainer.x = event.data.global.x - (that.radialContainer.width / 2);
       that.radialContainer.y = event.data.global.y - 30;
       that.radialContainer.visible = true;
 
@@ -127,4 +133,11 @@ class Radial {
    getCurrentPlayerAttack() {
      return this.currentPlayerAttack;
    }
+
+   /**
+    *
+    */
+    getCurrentPlayerAttackObject() {
+      return this.currentPlayerAttackObject;
+    }
 }

@@ -19,7 +19,7 @@ class IntroRules {
     rules.width = 300;
     rules.height = 300;
     rules.x = (this.app.view.width / 2) - (rules.width / 2);
-    rules.y = this.app.view.height - 310;
+    rules.y = this.app.view.height - 380;
     displayContainer.addChild(rules);
 
     // Background Text

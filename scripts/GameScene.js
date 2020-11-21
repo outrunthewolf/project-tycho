@@ -61,13 +61,13 @@ class GameScene {
     var pool = [
       {
         name: "rock",
-        texture: "avatarRock"
+        texture: "attackIconRock"
       },{
         name: "scissors",
-        texture: "avatarScissors"
+        texture: "attackIconScissors"
       },{
         name: "paper",
-        texture: "avatarPaper"
+        texture: "attackIconPaper"
       }
     ];
 
@@ -217,6 +217,7 @@ class GameScene {
       this.alienAttacks[i] = new PIXI.Sprite(this.resources[this.alienAttackArray[i].texture].texture);
       this.alienAttacks[i].width = 40;
       this.alienAttacks[i].height = 40;
+      this.alienAttacks[i].tint = 0xd74e09;
       this.alienAttacks[i].x = (this.app.view.width / 2) - (this.alienAttacks[i].width / 2);
       this.alienAttacks[i].y = 55;
       this.alienAttacks[i].alpha = 0;
@@ -362,37 +363,17 @@ class GameScene {
     // Intro storyboard
     this.backgroundStoryHolder = new PIXI.Container();
 
-    this.introStory1 = new IntroRules(this.app, this.loader, this.resources); //PIXI.Sprite(this.resources.backgroundStoryIntro1.texture);
+    this.introStory1 = new IntroRules(this.app, this.loader, this.resources);
     this.introStory1.y = 0;
     this.introStory1.vx = 0;
     this.introStory1.vy = 0;
     this.introStory1.alpha = 1;
     this.introStory1.x = (this.app.view.width / 2) - (this.introStory1.width / 2);
     this.backgroundStoryHolder.addChild(this.introStory1);
-    //
-    // this.introStory2 = new PIXI.Sprite(this.resources.backgroundStoryIntro2.texture);
-    // this.introStory2.height = this.app.view.height;
-    // this.introStory2.width = this.app.view.width;
-    // this.introStory2.x = 0;
-    // this.introStory2.y = 0;
-    // this.introStory2.vx = 0;
-    // this.introStory2.vy = 0;
-    // this.introStory2.alpha = 0;
-    // this.backgroundStoryHolder.addChild(this.introStory2);
-    //
-    // this.introStory3 = new PIXI.Sprite(this.resources.backgroundStoryIntro3.texture);
-    // this.introStory3.height = this.app.view.height;
-    // this.introStory3.width = this.app.view.width;
-    // this.introStory3.x = 0;
-    // this.introStory3.y = 0;
-    // this.introStory3.vx = 0;
-    // this.introStory3.vy = 0;
-    // this.introStory3.alpha = 0;
-    // this.backgroundStoryHolder.addChild(this.introStory3);
 
     this.skipButton = new ButtonSmallSkip(this.resources);
     this.skipButton.x = this.app.view.width - 20 - this.skipButton.width;
-    this.skipButton.y = 20;
+    this.skipButton.y = this.app.view.height - (20 + this.skipButton.height);
     this.backgroundStoryHolder.addChild(this.skipButton);
     this.backgroundHolder.addChild(this.backgroundStoryHolder);
 
@@ -406,7 +387,7 @@ class GameScene {
 
     // Fire event when we're ready to start everything
     document.body.addEventListener("playerAttackDropped", function (e) {
-      //gsap.to(that.battleScene, that.shakeLeftRightAnimation(that.battleScene.y));
+      gsap.to(that.radialContainer.getCurrentPlayerAttackObject(), that.shakeUpDownAnimation(that.radialContainer.getCurrentPlayerAttackObject().y));
     });
 
     // Fire event when we're ready to start everything
