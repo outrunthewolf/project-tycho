@@ -6,6 +6,7 @@ class Radial {
     this.currentPlayerAttack = "";
     this.currentPlayerAttackObject = { };
     this.radialDefenseY = 440;
+    this.ready = false;
 
     //
     this.radialItems = [
@@ -93,6 +94,8 @@ class Radial {
     }
 
     app.renderer.plugins.interaction.on('pointerdown', function(event) {
+      if (that.ready == false) return;
+
       that.radialContainer.x = event.data.global.x - (that.radialContainer.width / 2);
       that.radialContainer.y = event.data.global.y - 30;
       that.radialContainer.visible = true;
@@ -119,25 +122,37 @@ class Radial {
      return this.radialContainer;
    }
 
-   /**
-    *
-    */
+  /**
+  *
+  */
   setRadialDefenseY(y) {
-    console.log(y);
     this.radialDefenseY = y;
+  }
+
+  /**
+  *
+  */
+  getCurrentPlayerAttack() {
+    return this.currentPlayerAttack;
+  }
+
+  /**
+  *
+  */
+  getCurrentPlayerAttackObject() {
+    return this.currentPlayerAttackObject;
   }
 
   /**
    *
    */
-   getCurrentPlayerAttack() {
-     return this.currentPlayerAttack;
-   }
+  destroy() {
+    // Remove elements
+    if (this.attackRadial) this.attackRadial.destroy();
+    if (this.radialContainer) this.radialContainer.destroy();
 
-   /**
-    *
-    */
-    getCurrentPlayerAttackObject() {
-      return this.currentPlayerAttackObject;
-    }
+    // Remove some mouse events
+    app.renderer.plugins.interaction.off('pointerdown');
+    app.renderer.plugins.interaction.off('pointerup');
+  }
 }

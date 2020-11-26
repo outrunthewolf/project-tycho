@@ -18,13 +18,6 @@ class GameScene {
 
     // Opponent - In this case evil aliens
     this.alien = { };
-    this.alienHealth = 100;
-    this.alienAttackSpeed = 2;
-    this.alienAttackArray = [ ];
-    this.alienAttackLength = 20;
-    this.alienAttacks = [];
-    this.alienScore = 0;
-    this.alienExplosion = { };
 
     // Scene resources
     // This is a fullscreen page flash of white
@@ -41,6 +34,7 @@ class GameScene {
     this.healthBar = { };
     this.healthBarStep = 0; // Mask step
     this.radialContainer = { };
+    this.radialDefenseY = 10;
 
     // Story board stuff
     this.storyIntro1 = { };
@@ -55,80 +49,43 @@ class GameScene {
   }
 
   /**
-   *
-   */
-  generateAlienAttackArray() {
-    var pool = [
-      {
-        name: "rock",
-        texture: "attackIconRock"
-      },{
-        name: "scissors",
-        texture: "attackIconScissors"
-      },{
-        name: "paper",
-        texture: "attackIconPaper"
-      }
-    ];
-
-    var arr = [ ];
-
-    for (var i = 0; i < this.alienAttackLength; i++) {
-         var randomChar = pool[Math.floor(Math.random() * pool.length)];
-         arr.push(randomChar);
-    }
-
-    return arr;
-  }
-
-  /**
    * All that shit that happens every tick
    */
   play() {
     if (!this.ready) return;
-    if (this.gameOver == true) return;
     if (this.paused == true) return;
 
     // Start firing the attack things down
-    if(this.playerHealth > 0 && this.alienAttacks.length > 0) {
+    if(this.playerHealth > 0 && this.gameOver == false) {
 
-      var lastItem = this.alienAttacks[this.alienAttacks.length - 1];
-      lastItem.alpha = 1;
-      lastItem.y += this.alienAttackSpeed;
+      // render current alien attack at X position;
+      this.alien.renderCurrentAttack();
 
-      if (lastItem.y > (this.player.y - 50)) {
-        // Here we should evaluate what the human has done
-        switch(true) {
-          case (lastItem.name == this.radialContainer.getCurrentPlayerAttack()):
-            this.draw();
-            break;
-          case (lastItem.name == 'rock' && this.radialContainer.getCurrentPlayerAttack() == 'scissors'):
-            this.lose();
-            break;
-          case (lastItem.name == 'rock' && this.radialContainer.getCurrentPlayerAttack() == 'paper'):
-            this.win();
-            break;
-          case (lastItem.name == 'paper' && this.radialContainer.getCurrentPlayerAttack() == 'scissors'):
-            this.win();
-            break;
-          case (lastItem.name == 'paper' && this.radialContainer.getCurrentPlayerAttack() == 'rock'):
-            this.lose();
-            break;
-          case (lastItem.name == 'scissors' && this.radialContainer.getCurrentPlayerAttack() == 'rock'):
-            this.win();
-            break;
-          case (lastItem.name == 'scissors' && this.radialContainer.getCurrentPlayerAttack() == 'paper'):
-            this.lose();
-            break;
-          default:
-            this.lose();
+      // If the player has dropped a defense and the alien attack hits it
+      if ((this.alien.attack.y >= (this.player.y - this.radialDefenseY - 40))
+            && this.radialContainer.currentPlayerAttack != "") {
+        this.evaluateWinLoseDraw();
+
+        if (this.alien.nextLevelOrAttack() == true) {
+          this.playerScoreText.text = this.playerScore;
+          this.alien.destroyCurrentAttack();
+        }else{
+          this.gameOver = true;
         }
-
-        this.alienAttacks[this.alienAttacks.length - 1].destroy();
-        this.alienAttacks.splice(this.alienAttacks.length - 1, 1);
-
-        this.playerScoreText.text = this.playerScore;
       }
+
+      // If there is no attack
+      if (this.alien.attack.y >= this.player.y) {
+        this.lose();
+
+        if (this.alien.nextLevelOrAttack() == true) {
+          this.playerScoreText.text = this.playerScore;
+          this.alien.destroyCurrentAttack();
+        }else{
+          this.gameOver = true;
+        }
+      }
+
     }else{
       let that = this;
       this.gameOver = true;
@@ -138,6 +95,10 @@ class GameScene {
         this.healthBar.visible = 0;
         this.healthBarMask.visible = 0;
         this.pauseButton.visible = 0;
+        this.gameOverDispatched = true;
+        this.backgroundHolder.removeChild(this.radialContainer);
+        this.radialContainer.destroy();
+        this.alien.destroyCurrentAttack();
 
         var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
         tl.to(this.whiteFlash, {alpha: 1, duration: 0});
@@ -145,9 +106,8 @@ class GameScene {
 
         this.battleScene.destroy();
 
-        gsap.to(this.player, {y: (this.app.view.height / 2) - this.player.height, duration: 5});
-
-        tl.to(this.alien, {y: 1000, duration: 2, onComplete: function() {
+        tl.to(this.player, {y: (this.app.view.height / 2) - this.player.height, duration: 5});
+        tl.to(this.alien.getRenderable(), {y: 1000, duration: 2, onComplete: function() {
           document.body.dispatchEvent(new CustomEvent("event:gameover", {
             detail: {
               scene: that
@@ -156,6 +116,34 @@ class GameScene {
           }));
         }});
       }
+    }
+  }
+
+  evaluateWinLoseDraw() {
+    switch(true) {
+      case (this.alien.attack.name == this.radialContainer.getCurrentPlayerAttack()):
+        this.draw();
+        break;
+      case (this.alien.attack.name == 'rock' && this.radialContainer.getCurrentPlayerAttack() == 'scissors'):
+        this.lose();
+        break;
+      case (this.alien.attack.name == 'rock' && this.radialContainer.getCurrentPlayerAttack() == 'paper'):
+        this.win();
+        break;
+      case (this.alien.attack.name == 'paper' && this.radialContainer.getCurrentPlayerAttack() == 'scissors'):
+        this.win();
+        break;
+      case (this.alien.attack.name == 'paper' && this.radialContainer.getCurrentPlayerAttack() == 'rock'):
+        this.lose();
+        break;
+      case (this.alien.attack.name == 'scissors' && this.radialContainer.getCurrentPlayerAttack() == 'rock'):
+        this.win();
+        break;
+      case (this.alien.attack.name == 'scissors' && this.radialContainer.getCurrentPlayerAttack() == 'paper'):
+        this.lose();
+        break;
+      default:
+        this.lose();
     }
   }
 
@@ -169,9 +157,6 @@ class GameScene {
     this.backgroundHolder = new PIXI.Container();
     this.backgroundHolder.sortableChildren = true;
     this.stage.addChild(this.backgroundHolder);
-
-    // Load all the stuff we need
-    this.alienAttackArray = this.generateAlienAttackArray();
 
     // Load in the animate background
     const textures = [];
@@ -193,38 +178,10 @@ class GameScene {
     this.battleScene.alpha = 0;
     this.backgroundHolder.addChild(this.battleScene);
 
-    // Load in the alien
-    const alienTextures = [];
-    var arraySize = Object.keys(this.resources.alienAnimated.spritesheet.data.frames).length;
-
-    for (var i = 0; i < arraySize; i++) {
-      const framekey = `alien-animated ${i}.aseprite`;
-      const texture = PIXI.Texture.from(framekey);
-      const time = this.resources.alienAnimated.spritesheet.data.frames[framekey].duration;
-      alienTextures.push({ texture, time });
-    }
-    this.alien = new PIXI.AnimatedSprite(alienTextures);
-    this.alien.height = 100;
-    this.alien.width = 100;
-    this.alien.x = (this.app.view.width / 2) - (this.alien.width / 2);
-    this.alien.y = -300;
-    this.alien.alpha = 0;
-    this.alien.vx = 0;
-    this.alien.vy = 0;
-
-    // Load the aliens attack
-    for (i = 0; i < this.alienAttackArray.length; i++) {
-      this.alienAttacks[i] = new PIXI.Sprite(this.resources[this.alienAttackArray[i].texture].texture);
-      this.alienAttacks[i].width = 40;
-      this.alienAttacks[i].height = 40;
-      this.alienAttacks[i].tint = 0xd74e09;
-      this.alienAttacks[i].x = (this.app.view.width / 2) - (this.alienAttacks[i].width / 2);
-      this.alienAttacks[i].y = 55;
-      this.alienAttacks[i].alpha = 0;
-      this.alienAttacks[i].name = this.alienAttackArray[i].name;
-      this.backgroundHolder.addChild(this.alienAttacks[i]);
-    }
-    this.backgroundHolder.addChild(this.alien);
+    this.alien = new Alien(this.app, this.loader, this.resources);
+    this.alien.getRenderable().x = (this.app.view.width / 2) - (this.alien.getRenderable().width / 2);
+    this.alien.getRenderable().y = -300;
+    this.backgroundHolder.addChild(this.alien.getRenderable());
 
     // Load in the player
     const playerTextures = [];
@@ -246,28 +203,6 @@ class GameScene {
     this.player.vy = 0;
     this.player.name = "player";
     this.backgroundHolder.addChild(this.player);
-
-    // Load in the alien explosion
-    const alienExplosionTextures = [];
-    var arraySize = Object.keys(this.resources.explosionAnimated.spritesheet.data.frames).length;
-
-    for (var i = 0; i < arraySize; i++) {
-      const framekey = `background-explosion-animated ${i}.aseprite`;
-      const texture = PIXI.Texture.from(framekey);
-      const time = this.resources.explosionAnimated.spritesheet.data.frames[framekey].duration;
-      alienExplosionTextures.push({ texture, time });
-    }
-    this.alienExplosion = new PIXI.AnimatedSprite(alienExplosionTextures);
-    this.alienExplosion.y = 0;
-    this.alienExplosion.x = 0;
-    this.alienExplosion.height = 100;
-    this.alienExplosion.width = 100;
-    this.alienExplosion.vx = 0;
-    this.alienExplosion.vy = 0;
-    this.alienExplosion.alpha = 0;
-    this.alienExplosion.loop = false;
-    this.alienExplosion.animationSpeed = 5;
-    this.backgroundHolder.addChild(this.alienExplosion);
 
     // Load in the player explosion
     const playerExplosionTextures = [];
@@ -393,9 +328,8 @@ class GameScene {
     // Fire event when we're ready to start everything
     document.body.addEventListener("readyToPlay", function (e) {
       that.ready = true;
-      that.radialContainer.setRadialDefenseY(that.player.y - 50);
-      that.radialContainer.getRenderable().visible = true;
-      that.play();
+      that.radialContainer.setRadialDefenseY(that.player.y - that.radialDefenseY);
+      that.radialContainer.ready = true;
     });
   }
 
@@ -427,16 +361,16 @@ class GameScene {
     tl.fromTo(this.player, {y: this.app.view.height + 700, alpha: 1}, {y: this.app.view.height - 200, alpha: 1, duration: 2});
     tl.to(this.healthBar, {y: this.app.view.height - 230 + this.player.height, alpha: 1});
     tl.to(this.healthBarMask, {y: this.app.view.height - 228 + this.player.height, alpha: 1});
-    tl.fromTo(this.alien, {y: 0, alpha: 0}, {y: 50, alpha: 1});
+    tl.fromTo(this.alien.getRenderable(), {y: 0, alpha: 0}, {y: 50, alpha: 1});
 
     tl.to(this.whiteFlash, {alpha: 1, duration: 0});
     tl.to(this.battleScene, {alpha: 1, duration: 0});
 
-    tl.to(this.whiteFlash, {alpha: 0, duration: 2, onComplete: function() {
+    tl.to(this.whiteFlash, {alpha: 0, duration: 1, onComplete: function() {
 
       that.step = that.healthBar.width / that.playerHealth;
       that.battleScene.play();
-      that.alien.play();
+      that.alien.getRenderable().getChildByName("alien").play();
 
       document.body.dispatchEvent(new CustomEvent("readyToPlay", {
         bubbles: true
@@ -467,16 +401,13 @@ class GameScene {
 
     // Flash the barrier and shake the enemy
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
-    gsap.to(this.alienExplosion, {alpha: 1, duration: 0, x: (this.app.view.width / 2) - (this.alienExplosion.width / 2), y: this.alien.y, onComplete: function() {
-      that.alienExplosion.gotoAndPlay(0);
-    }});
     tl.to(this.defenseFlash, { alpha: 1, duration: 0.1 });
     tl.to(this.defenseFlash, { alpha: 0, duration: 0.2 });
 
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
-    tl.to(this.alien, { tint: 0xFF9600, duration: 0.2 });
-    tl.to(this.alien, { tint: 0xFFFFFF, duration: 0.2 });
-    gsap.to(this.alien, this.shakeUpDownAnimation(this.alien.y));
+    tl.to(this.alien.getRenderable(), { tint: 0xFF9600, duration: 0.2 });
+    tl.to(this.alien.getRenderable(), { tint: 0xFFFFFF, duration: 0.2 });
+    gsap.to(this.alien.getRenderable(), this.shakeUpDownAnimation(this.alien.getRenderable().y));
 
     ++this.playerScore;
   }
@@ -559,11 +490,11 @@ class GameScene {
     if(this.paused == true) {
       this.paused = false;
       this.battleScene.play();
-      this.alien.play();
+      this.alien.getRenderable().play();
     }else{
       this.paused = true;
       this.battleScene.stop();
-      this.alien.stop();
+      this.alien.getRenderable().stop();
     }
   }
 
