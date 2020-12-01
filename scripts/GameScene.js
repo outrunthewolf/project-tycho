@@ -116,7 +116,8 @@ class GameScene {
         tl.to(this.alien.getRenderable(), {y: 1000, duration: 2, onComplete: function() {
           document.body.dispatchEvent(new CustomEvent("event:gameover", {
             detail: {
-              scene: that
+              scene: that,
+              level: that.alien.current_level
             },
             bubbles: true
           }));

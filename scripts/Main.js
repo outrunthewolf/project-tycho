@@ -102,7 +102,7 @@ function loadScenes() {
 
   // Event: Game Over
   document.body.addEventListener("event:gameover", function (e) {
-    gameOverScreen.render(1);
+    gameOverScreen.render(e.detail.level+1);
     app.stage.sortChildren();
     e.detail.scene.destroy();
     gameScene.destroy();

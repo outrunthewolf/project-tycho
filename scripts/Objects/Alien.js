@@ -110,6 +110,18 @@ class Alien {
         name: "level-5",
         speed: 6,
         attacks: [ ]
+      },{
+        name: "level-6",
+        speed: 7,
+        attacks: [ ]
+      },{
+        name: "level-7",
+        speed: 8,
+        attacks: [ ]
+      },{
+        name: "level-8",
+        speed: 9,
+        attacks: [ ]
       }];
 
     // Loop system and return the levels we need
