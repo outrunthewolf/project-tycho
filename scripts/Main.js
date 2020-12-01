@@ -15,6 +15,7 @@ let Application = PIXI.Application,
 const container = document.getElementById('container');
 const containerWidth = container.offsetWidth;
 const containerHeight = container.offsetHeight;
+var firstPlay = true;
 
 //Create a Pixi Application
 let app = new Application({
@@ -50,18 +51,31 @@ loader.onComplete.once((loaderObject, assetsObject) => {
  */
 function loadScenes() {
   let menuScreen = new MainMenuScreen(app, loader, resources);
-  let settingsScreen = new SettingsScreen(app, loader, resources);
+  let creditScreen = new CreditScreen(app, loader, resources);
   let howToPlayScreen = new RulesScreen(app, loader, resources);
   let gameOverScreen = new GameOverScreen(app, loader, resources);
   let pauseScreen = new PauseScreen(app, loader, resources);
+  let sound = new Sound(app, loader, resources);
   let gameScene = { };
 
   app.stage.sortableChildren = true;
+  sound.renderControls();
 
   // Screen: Menu
   document.body.addEventListener("event:showmainmenu", function (e) {
     menuScreen.render();
     app.stage.sortChildren();
+
+    // Play main music
+    sound.playMusicMain();
+
+    // Set sound to mute on first play because some
+    // browsers mute certain tabs automatically
+    if(firstPlay ==  true) {
+      PIXI.sound.volumeAll = 0;
+      firstPlay = false;
+    }
+
 
     if (e.detail) e.detail.scene.destroy();
 
@@ -71,8 +85,8 @@ function loadScenes() {
   });
 
   // Screen: Settings
-  document.body.addEventListener("event:showsettings", function (e) {
-    settingsScreen.render();
+  document.body.addEventListener("event:showcredits", function (e) {
+    creditScreen.render();
     app.stage.sortChildren();
 
     e.detail.scene.destroy();
@@ -88,7 +102,7 @@ function loadScenes() {
 
   // Event: Game Over
   document.body.addEventListener("event:gameover", function (e) {
-    gameOverScreen.render(e.detail.scene.playerScore);
+    gameOverScreen.render(e.detail.scene.alien.current_level);
     app.stage.sortChildren();
     e.detail.scene.destroy();
     gameScene.destroy();
@@ -100,10 +114,13 @@ function loadScenes() {
 
   // Event: Play Game
   document.body.addEventListener("event:playgame", function (e) {
-    gameScene = new GameScene(app, loader, resources);
+    gameScene = new GameScene(app, loader, resources, sound);
     gameEventArray.push(gameScene);
     gameScene.render();
     app.stage.sortChildren();
+
+    // Play main music
+    sound.playMusicGame();
 
     e.detail.scene.destroy();
   });

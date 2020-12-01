@@ -1,12 +1,13 @@
 // ES6 Class adding a method to the Person prototype
 class GameScene {
-  constructor(app, loader, resources) {
+  constructor(app, loader, resources, sound) {
     this.stage = app.stage;
     this.app = app;
     this.backgroundHolder = { };
     this.backgroundStoryHolder = { };
     this.loader = loader;
     this.resources = resources;
+    this.sound = sound;
 
     // Player Stuff - In this case the player is the moon
     this.player = { };
@@ -46,6 +47,9 @@ class GameScene {
     this.ready = false;
     this.gameOver = false;
     this.gameOverDispatched = false;
+
+    //
+    this.nextAttackReady = true;
   }
 
   /**
@@ -54,6 +58,7 @@ class GameScene {
   play() {
     if (!this.ready) return;
     if (this.paused == true) return;
+    if (this.nextAttackReady == false) return;
 
     // Start firing the attack things down
     if(this.playerHealth > 0 && this.gameOver == false) {
@@ -67,7 +72,7 @@ class GameScene {
         this.evaluateWinLoseDraw();
 
         if (this.alien.nextLevelOrAttack() == true) {
-          this.playerScoreText.text = this.playerScore;
+          this.playerScoreText.text = "Level: " + (this.alien.current_level+1);
           this.alien.destroyCurrentAttack();
         }else{
           this.gameOver = true;
@@ -79,8 +84,9 @@ class GameScene {
         this.lose();
 
         if (this.alien.nextLevelOrAttack() == true) {
-          this.playerScoreText.text = this.playerScore;
+          this.playerScoreText.text = "Level: " + (this.alien.current_level+1);
           this.alien.destroyCurrentAttack();
+          this.sound.playSound("soundAlienDropAttack");
         }else{
           this.gameOver = true;
         }
@@ -262,7 +268,7 @@ class GameScene {
     });
 
     // Score
-    this.playerScoreText = new PIXI.Text("0", new PIXI.TextStyle({
+    this.playerScoreText = new PIXI.Text("Level: 1", new PIXI.TextStyle({
       fontFamily: "arial",
       fontSize: 50,
       fill: '#FFFFFF'
@@ -323,6 +329,16 @@ class GameScene {
     // Fire event when we're ready to start everything
     document.body.addEventListener("playerAttackDropped", function (e) {
       gsap.to(that.radialContainer.getCurrentPlayerAttackObject(), that.shakeUpDownAnimation(that.radialContainer.getCurrentPlayerAttackObject().y));
+      that.sound.playSound('soundHumanDropDefense');
+    });
+
+    // Listen for next level
+    document.body.addEventListener("event:nextlevel", function (e) {
+      var shake = that.shakeUpDownAnimation(that.playerScoreText.y);
+      shake.onComplete = function() {
+        that.sound.playSound('soundNextLevel');
+      };
+      gsap.to(that.playerScoreText, shake);
     });
 
     // Fire event when we're ready to start everything
@@ -386,7 +402,7 @@ class GameScene {
       bubbles: true
     }));
 
-    console.log("DRAW");
+    this.sound.playSound('soundDraw');
   }
 
   /**
@@ -394,6 +410,7 @@ class GameScene {
    */
   win() {
     var that = this;
+    this.nextAttackReady = false;
 
     document.body.dispatchEvent(new CustomEvent("win", {
       bubbles: true
@@ -407,9 +424,17 @@ class GameScene {
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
     tl.to(this.alien.getRenderable(), { tint: 0xFF9600, duration: 0.2 });
     tl.to(this.alien.getRenderable(), { tint: 0xFFFFFF, duration: 0.2 });
-    gsap.to(this.alien.getRenderable(), this.shakeUpDownAnimation(this.alien.getRenderable().y));
+    var shake = this.shakeUpDownAnimation(this.alien.getRenderable().y);
+    shake.onComplete = function() {
+      that.sound.playSound("soundAlienDropAttack");
+      that.nextAttackReady = true;
+    };
+    gsap.to(this.alien.getRenderable(), shake);
 
     ++this.playerScore;
+
+    this.sound.playSound('soundWin');
+    //this.sound.playSound('soundHumanAttack');
   }
 
   /**
@@ -439,6 +464,9 @@ class GameScene {
     tl.to(this.player, { tint: 0xFF9600, duration: 0.2 });
     tl.to(this.player, { tint: 0xFFFFFF, duration: 0.2 });
     gsap.to(this.player, this.shakeUpDownAnimation(this.player.y));
+
+    this.sound.playSound('soundLose');
+    //this.sound.playSound('soundAlienAttack');
   }
 
   /**
@@ -490,11 +518,9 @@ class GameScene {
     if(this.paused == true) {
       this.paused = false;
       this.battleScene.play();
-      this.alien.getRenderable().play();
     }else{
       this.paused = true;
       this.battleScene.stop();
-      this.alien.getRenderable().stop();
     }
   }
 

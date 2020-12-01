@@ -51,7 +51,7 @@ class MainMenuScreen {
     this.menuHolder.addChild(planet);
 
     // Title
-    var titleText = new PIXI.Text("Project\nMoonshot", new PIXI.TextStyle({
+    var titleText = new PIXI.Text("Project\nTycho", new PIXI.TextStyle({
       fontFamily: "emery",
       fontSize: 75,
       fill: '#f2bb05',
@@ -105,13 +105,13 @@ class MainMenuScreen {
     });
 
     // Settings Button
-    const settingsButton = new ButtonLarge(this.resources, "Settings");
-    settingsButton.x = (this.app.view.width / 2) - (settingsButton.width / 2);
-    settingsButton.y = howButton.y + 95;
-    this.menuHolder.addChild(settingsButton);
+    const creditsButton = new ButtonLarge(this.resources, "Credits");
+    creditsButton.x = (this.app.view.width / 2) - (creditsButton.width / 2);
+    creditsButton.y = howButton.y + 95;
+    this.menuHolder.addChild(creditsButton);
 
-    settingsButton.on('pointerdown', function (e) {
-      document.body.dispatchEvent(new CustomEvent("event:showsettings", {
+    creditsButton.on('pointerdown', function (e) {
+      document.body.dispatchEvent(new CustomEvent("event:showcredits", {
         bubbles: true,
         detail: {
           scene: that

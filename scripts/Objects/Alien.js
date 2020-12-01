@@ -88,12 +88,27 @@ class Alien {
 
     var levelsPool = [{
         name: "level-1",
-        speed: 1,
+        speed: 2,
         attacks: [ ]
       },
       {
         name: "level-2",
-        speed: 2,
+        speed: 3,
+        attacks: [ ]
+      },
+      {
+        name: "level-3",
+        speed: 4,
+        attacks: [ ]
+      },
+      {
+        name: "level-4",
+        speed: 5,
+        attacks: [ ]
+      },
+      {
+        name: "level-5",
+        speed: 6,
         attacks: [ ]
       }];
 
@@ -106,7 +121,6 @@ class Alien {
       }
       levelsPool[y].attacks = attacks;
     }
-    console.log(levelsPool);
 
     return levelsPool;
   }
@@ -121,6 +135,10 @@ class Alien {
       if (this.reachedEndOfGame() == true) {
         return false;
       }else{
+        document.body.dispatchEvent(new CustomEvent("event:nextlevel", {
+          bubbles: true
+        }));
+
         ++this.current_level;
         this.current_attack = 0;
         return true;
@@ -180,8 +198,10 @@ class Alien {
    *
    */
   destroyCurrentAttack() {
-    this.attack.destroy();
-    this.attack = false;
+    if (this.attack) {
+      this.attack.destroy();
+      this.attack = false;
+    }
   }
 
   /**

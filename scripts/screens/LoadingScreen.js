@@ -42,6 +42,28 @@ class LoadingScreen {
     this.loader.add('moonAnimated', 'resources/sprites/background-moon-animated.json');
     this.loader.add('explosionAnimated', 'resources/sprites/background-explosion-animated.json');
     this.loader.add('explosionVerticalAnimated', 'resources/sprites/background-explosion-vertical-animated.json');
+
+    // Sound
+    this.loader.add('musicMain', 'resources/sounds/music/the_laboratory_loop.wav');
+    this.loader.add('musicGame', 'resources/sounds/music/jump_and_shoot_man_loop.wav');
+
+    //this.loader.add('soundAlienAttack', 'resources/sounds/Bomb_Explosion.wav');
+    this.loader.add('soundHumanAttack', 'resources/sounds/Bomb_Explosion.wav');
+    this.loader.add('soundAlienDropAttack', 'resources/sounds/Shoot3.wav');
+    this.loader.add('soundHumanDropDefense', 'resources/sounds/Laser.wav');
+    this.loader.add('soundWin', 'resources/sounds/Magic.wav');
+    this.loader.add('soundDraw', 'resources/sounds/Magic2.wav');
+    this.loader.add('soundLose', 'resources/sounds/Monster2.wav');
+    this.loader.add('soundNextLevel', 'resources/sounds/Find_Item.wav');
+    /**
+     * Alien Hits Player - Bomb_Explosion.wav
+     * Human Hits Alien - Bomb_Explosion.wav
+     * Alien Drops attack - Shoot3.wav
+     * Human Drops defense - Health.wav
+     * Win - Magic.wav
+     * Draw - Magic2.wav
+     * Lose - Monster1.wav
+     */
   }
 
   /**
