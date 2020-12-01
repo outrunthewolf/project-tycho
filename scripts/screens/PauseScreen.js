@@ -11,17 +11,16 @@ class PauseScreen {
   /**
    * Render the menu
    */
-  render(score) {
+  render(level) {
 
     this.menuHolder = new PIXI.Container();
     this.stage.addChild(this.menuHolder);
-    this.playerScore = score;
+    this.playerScore = level;
     const that = this;
 
     // Background
     var whiteFlash = new PIXI.Graphics();
-    whiteFlash.lineStyle(4, 0xFF3300, 1);
-    whiteFlash.beginFill(0x222034);
+    whiteFlash.beginFill(0x000000);
     whiteFlash.drawRect(0, 0, this.app.view.width, this.app.view.height);
     whiteFlash.endFill();
     whiteFlash.x = 0;
@@ -42,19 +41,21 @@ class PauseScreen {
     this.menuHolder.addChild(titleText);
 
     // Score
-    var scoreText = new PIXI.Text("Score: " + this.playerScore, new PIXI.TextStyle({
-      fontFamily: "emery",
-      fontSize: 30,
-      fill: '#d74e09'
+    var scoreText = new PIXI.Text("Level: " + this.playerScore, new PIXI.TextStyle({
+      fontFamily: "patlabour",
+      fontSize: 40,
+      stroke: '#222034',
+      strokeThickness: 7,
+      fill: '#f0f0c9'
     }));
-    scoreText.x = (this.app.view.width / 2) - (titleText.width / 2);
+    scoreText.x = (this.app.view.width / 2) - (scoreText.width / 2);
     scoreText.y = 300;
     this.menuHolder.addChild(scoreText);
 
     // Play Button
     const returnButton = new ButtonLarge(this.resources, "Resume");
     returnButton.x = (this.app.view.width / 2) - (returnButton.width / 2);
-    returnButton.y = this.app.view.height - 300;
+    returnButton.y = this.app.view.height - 250;
     this.menuHolder.addChild(returnButton);
 
     returnButton.on('pointerdown', function (e) {

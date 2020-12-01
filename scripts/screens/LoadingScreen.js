@@ -47,13 +47,13 @@ class LoadingScreen {
     this.loader.add('musicMain', 'resources/sounds/music/the_laboratory_loop.wav');
     this.loader.add('musicGame', 'resources/sounds/music/jump_and_shoot_man_loop.wav');
 
-    //this.loader.add('soundAlienAttack', 'resources/sounds/Bomb_Explosion.wav');
+    this.loader.add('soundAlienAttack', 'resources/sounds/Bomb_Explosion.wav');
     this.loader.add('soundHumanAttack', 'resources/sounds/Bomb_Explosion.wav');
     this.loader.add('soundAlienDropAttack', 'resources/sounds/Shoot3.wav');
     this.loader.add('soundHumanDropDefense', 'resources/sounds/Laser.wav');
     this.loader.add('soundWin', 'resources/sounds/Magic.wav');
     this.loader.add('soundDraw', 'resources/sounds/Magic2.wav');
-    this.loader.add('soundLose', 'resources/sounds/Monster2.wav');
+    this.loader.add('soundLose', 'resources/sounds/Scream.wav');
     this.loader.add('soundNextLevel', 'resources/sounds/Find_Item.wav');
     /**
      * Alien Hits Player - Bomb_Explosion.wav
@@ -76,7 +76,7 @@ class LoadingScreen {
     // Show loading...
     var loadingText = new PIXI.Text("Loading...", new PIXI.TextStyle({
       fontSize: 25,
-      fill: '#d74e09',//red ,//'#f0f0c9'// white,
+      fill: '#f0f0c9',
       align: 'center'
     }));
     loadingText.x = (this.app.view.width / 2) - (loadingText.width / 2);

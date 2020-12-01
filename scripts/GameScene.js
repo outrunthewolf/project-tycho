@@ -269,12 +269,14 @@ class GameScene {
 
     // Score
     this.playerScoreText = new PIXI.Text("Level: 1", new PIXI.TextStyle({
-      fontFamily: "arial",
+      fontFamily: "patlabour",
       fontSize: 50,
-      fill: '#FFFFFF'
+      stroke: '#222034',
+      strokeThickness: 7,
+      fill: '#f0f0c9'
     }));
-    this.playerScoreText.x = 0;
-    this.playerScoreText.y = 0;
+    this.playerScoreText.x = 20;
+    this.playerScoreText.y = (this.app.view.height / 2) - (this.playerScoreText.height / 2);
     this.backgroundHolder.addChild(this.playerScoreText);
 
     // player Health
@@ -334,7 +336,7 @@ class GameScene {
 
     // Listen for next level
     document.body.addEventListener("event:nextlevel", function (e) {
-      var shake = that.shakeUpDownAnimation(that.playerScoreText.y);
+      var shake = that.shakeLeftRightAnimation(that.playerScoreText.x);
       shake.onComplete = function() {
         that.sound.playSound('soundNextLevel');
       };
@@ -462,11 +464,12 @@ class GameScene {
       that.playerExplosion.gotoAndPlay(0);
     }});
     tl.to(this.player, { tint: 0xFF9600, duration: 0.2 });
-    tl.to(this.player, { tint: 0xFFFFFF, duration: 0.2 });
+    tl.to(this.player, { tint: 0xFFFFFF, duration: 0.2, onComplete: function(){
+      that.sound.playSound('soundLose');
+    }});
     gsap.to(this.player, this.shakeUpDownAnimation(this.player.y));
 
-    this.sound.playSound('soundLose');
-    //this.sound.playSound('soundAlienAttack');
+    this.sound.playSound('soundAlienAttack');
   }
 
   /**

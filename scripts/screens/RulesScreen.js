@@ -31,6 +31,21 @@ class RulesScreen {
     titleText.y = 75;
     this.menuHolder.addChild(titleText);
 
+    // Background Text
+    var textn = "1. Hold down mouse to show defence radial\n\n2. Release mouse on chosen defence (Paper, Rock, Scissors)\n\n3. Hold out as long as you can!";
+    var text = new PIXI.Text(textn, new PIXI.TextStyle({
+      fontFamily: "patlabour",
+      fontSize: 34,
+      fill: '#f0f0c9',
+      stroke: '#000',
+      strokeThickness: 1,
+      wordWrap: true,
+      wordWrapWidth: this.app.view.width - 40
+    }));
+    text.y = (this.app.view.height / 2) - (text.height / 2);
+    text.x = (this.app.view.width / 2) - (text.width / 2);
+    this.menuHolder.addChild(text);
+
     // Play Button
     const exitButton = new ButtonLarge(this.resources, "<- Back");
     exitButton.x = (this.app.view.width / 2) - (exitButton.width / 2);

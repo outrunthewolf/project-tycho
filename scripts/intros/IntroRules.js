@@ -19,7 +19,7 @@ class IntroRules {
     rules.width = 300;
     rules.height = 300;
     rules.x = (this.app.view.width / 2) - (rules.width / 2);
-    rules.y = this.app.view.height - 380;
+    rules.y = this.app.view.height - 350;
     displayContainer.addChild(rules);
 
     // Background Text
@@ -33,7 +33,7 @@ class IntroRules {
       wordWrap: true,
       wordWrapWidth: this.app.view.width - 40
     }));
-    text.y = 40;
+    text.y = 80;
     text.x = (this.app.view.width / 2) - (text.width / 2);
     displayContainer.addChild(text);
 

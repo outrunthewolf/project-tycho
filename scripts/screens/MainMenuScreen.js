@@ -77,7 +77,7 @@ class MainMenuScreen {
     // Play Button
     const playButton = new ButtonLarge(this.resources, "Play");
     playButton.x = (this.app.view.width / 2) - (playButton.width / 2);
-    playButton.y = this.app.view.height - 300;
+    playButton.y = this.app.view.height - 250;
     this.menuHolder.addChild(playButton);
 
     playButton.on('pointerdown', function (e) {
@@ -104,20 +104,20 @@ class MainMenuScreen {
       }));
     });
 
-    // Settings Button
-    const creditsButton = new ButtonLarge(this.resources, "Credits");
-    creditsButton.x = (this.app.view.width / 2) - (creditsButton.width / 2);
-    creditsButton.y = howButton.y + 95;
-    this.menuHolder.addChild(creditsButton);
-
-    creditsButton.on('pointerdown', function (e) {
-      document.body.dispatchEvent(new CustomEvent("event:showcredits", {
-        bubbles: true,
-        detail: {
-          scene: that
-        }
-      }));
-    });
+    // // Settings Button
+    // const creditsButton = new ButtonLarge(this.resources, "Credits");
+    // creditsButton.x = (this.app.view.width / 2) - (creditsButton.width / 2);
+    // creditsButton.y = howButton.y + 95;
+    // this.menuHolder.addChild(creditsButton);
+    //
+    // creditsButton.on('pointerdown', function (e) {
+    //   document.body.dispatchEvent(new CustomEvent("event:showcredits", {
+    //     bubbles: true,
+    //     detail: {
+    //       scene: that
+    //     }
+    //   }));
+    // });
 
 
 

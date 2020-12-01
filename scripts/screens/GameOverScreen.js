@@ -53,6 +53,19 @@ class GameOverScreen {
     titleText.y = 100;
     this.menuHolder.addChild(titleText);
 
+    // Score
+    var scoreText = new PIXI.Text("You reached\nLevel: " + score + "!", new PIXI.TextStyle({
+      fontFamily: "patlabour",
+      fontSize: 40,
+      stroke: '#222034',
+      strokeThickness: 7,
+      fill: '#f0f0c9',
+      align: "center"
+    }));
+    scoreText.x = (this.app.view.width / 2) - (scoreText.width / 2);
+    scoreText.y = 300;
+    this.menuHolder.addChild(scoreText);
+
     // Main Menu Button
     var exitButton = new ButtonLarge(this.resources, "Main Menu");
     exitButton.x = (this.app.view.width / 2) - (exitButton.width / 2);

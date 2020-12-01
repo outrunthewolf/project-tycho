@@ -102,7 +102,7 @@ function loadScenes() {
 
   // Event: Game Over
   document.body.addEventListener("event:gameover", function (e) {
-    gameOverScreen.render(e.detail.scene.alien.current_level);
+    gameOverScreen.render(1);
     app.stage.sortChildren();
     e.detail.scene.destroy();
     gameScene.destroy();
@@ -132,7 +132,7 @@ function loadScenes() {
       gameScene.togglePause();
       pause = false;
     }else{
-      pauseScreen.render(gameScene.playerScore);
+      pauseScreen.render(gameScene.alien.current_level+1);
       gameScene.togglePause();
       pause = true;
     }
