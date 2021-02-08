@@ -11,7 +11,7 @@ class GameOverScreen {
   /**
    * Render the menu
    */
-  render(score) {
+  render(level, score) {
 
     this.menuHolder = new PIXI.Container();
     this.stage.addChild(this.menuHolder);
@@ -54,7 +54,7 @@ class GameOverScreen {
     this.menuHolder.addChild(titleText);
 
     // Score
-    var scoreText = new PIXI.Text("You reached\nLevel: " + score + "!", new PIXI.TextStyle({
+    var levelText = new PIXI.Text("You reached\nLevel: " + level + "!", new PIXI.TextStyle({
       fontFamily: "patlabour",
       fontSize: 40,
       stroke: '#222034',
@@ -62,8 +62,20 @@ class GameOverScreen {
       fill: '#f0f0c9',
       align: "center"
     }));
+    levelText.x = (this.app.view.width / 2) - (levelText.width / 2);
+    levelText.y = 300;
+    this.menuHolder.addChild(levelText);
+
+    var scoreText = new PIXI.Text("Humans saved: " + score.toFixed(2) + "k", new PIXI.TextStyle({
+      fontFamily: "patlabour",
+      fontSize: 20,
+      stroke: '#222034',
+      strokeThickness: 7,
+      fill: '#f0f0c9',
+      align: "center"
+    }));
     scoreText.x = (this.app.view.width / 2) - (scoreText.width / 2);
-    scoreText.y = 300;
+    scoreText.y = 390;
     this.menuHolder.addChild(scoreText);
 
     // Main Menu Button

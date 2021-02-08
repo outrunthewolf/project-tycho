@@ -1,2 +1,4 @@
 node_modules
 package.json
+.DS_Store
+resources/.DS_Store

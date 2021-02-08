@@ -55,6 +55,7 @@ function loadScenes() {
   let howToPlayScreen = new RulesScreen(app, loader, resources);
   let gameOverScreen = new GameOverScreen(app, loader, resources);
   let pauseScreen = new PauseScreen(app, loader, resources);
+  let powerUps = { };
   let sound = new Sound(app, loader, resources);
   let gameScene = { };
 
@@ -102,20 +103,23 @@ function loadScenes() {
 
   // Event: Game Over
   document.body.addEventListener("event:gameover", function (e) {
-    gameOverScreen.render(e.detail.level+1);
+    gameOverScreen.render(e.detail.level+1, e.detail.score);
     app.stage.sortChildren();
     e.detail.scene.destroy();
     gameScene.destroy();
 
     // Clear any old games in progress
     gameScene = { };
+    powerUps = { };
     gameEventArray = [ ];
   });
 
   // Event: Play Game
   document.body.addEventListener("event:playgame", function (e) {
     gameScene = new GameScene(app, loader, resources, sound);
+    //powerUps = new PowerUps(app, loader, resources);
     gameEventArray.push(gameScene);
+    //gameEventArray.push(powerUps);
     gameScene.render();
     app.stage.sortChildren();
 
@@ -132,7 +136,7 @@ function loadScenes() {
       gameScene.togglePause();
       pause = false;
     }else{
-      pauseScreen.render(gameScene.alien.current_level+1);
+      pauseScreen.render(gameScene.alien.current_level+1, gameScene.playerHumansSaved);
       gameScene.togglePause();
       pause = true;
     }
@@ -158,7 +162,7 @@ function gameLoop(delta) {
 function play(delta) {
   if (pause !== true) {
     for (i = 0; i < gameEventArray.length; i++) {
-      gameEventArray[i].play();
+      gameEventArray[i].play(delta);
     }
   }
 }

@@ -11,11 +11,12 @@ class PauseScreen {
   /**
    * Render the menu
    */
-  render(level) {
+  render(level, score) {
 
     this.menuHolder = new PIXI.Container();
     this.stage.addChild(this.menuHolder);
-    this.playerScore = level;
+    this.playerScore = score;
+    this.playerLevel = level;
     const that = this;
 
     // Background
@@ -40,16 +41,27 @@ class PauseScreen {
     titleText.y = 75;
     this.menuHolder.addChild(titleText);
 
-    // Score
-    var scoreText = new PIXI.Text("Level: " + this.playerScore, new PIXI.TextStyle({
+    // Level
+    var levelText = new PIXI.Text("Level: " + this.playerLevel, new PIXI.TextStyle({
       fontFamily: "patlabour",
       fontSize: 40,
       stroke: '#222034',
       strokeThickness: 7,
       fill: '#f0f0c9'
     }));
+    levelText.x = (this.app.view.width / 2) - (levelText.width / 2);
+    levelText.y = 300;
+    this.menuHolder.addChild(levelText);
+
+    var scoreText = new PIXI.Text("Humans Saved: " + this.playerScore.toFixed(2) + "k", new PIXI.TextStyle({
+      fontFamily: "patlabour",
+      fontSize: 20,
+      stroke: '#222034',
+      strokeThickness: 7,
+      fill: '#f0f0c9'
+    }));
     scoreText.x = (this.app.view.width / 2) - (scoreText.width / 2);
-    scoreText.y = 300;
+    scoreText.y = 350;
     this.menuHolder.addChild(scoreText);
 
     // Play Button
@@ -77,7 +89,8 @@ class PauseScreen {
       document.body.dispatchEvent(new CustomEvent("event:gameover", {
         bubbles: true,
         detail: {
-          scene: that
+          scene: that,
+          level: that.playerLevel
         }
       }));
     });

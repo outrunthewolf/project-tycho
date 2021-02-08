@@ -86,43 +86,20 @@ class Alien {
         texture: "attackIconPaper"
       }];
 
-    var levelsPool = [{
-        name: "level-1",
-        speed: 2,
-        attacks: [ ]
-      },
-      {
-        name: "level-2",
-        speed: 3,
-        attacks: [ ]
-      },
-      {
-        name: "level-3",
-        speed: 4,
-        attacks: [ ]
-      },
-      {
-        name: "level-4",
-        speed: 5,
-        attacks: [ ]
-      },
-      {
-        name: "level-5",
-        speed: 6,
-        attacks: [ ]
-      },{
-        name: "level-6",
-        speed: 7,
-        attacks: [ ]
-      },{
-        name: "level-7",
-        speed: 8,
-        attacks: [ ]
-      },{
-        name: "level-8",
-        speed: 9,
-        attacks: [ ]
-      }];
+    var levelsPool = [];
+
+    // Generates levels by a curve
+    var n = 0;
+    var count = 0;
+    for (y = 1; n <= 25; y = y + 0.2) {
+      var n = Math.pow(y, 2).toFixed(2);
+      levelsPool.push({
+        name: "level-" + count,
+        speed: Number(n),
+        attacks: []
+      });
+      ++count;
+    }
 
     // Loop system and return the levels we need
     for (var y = 0; y < levelsPool.length; y++) {
@@ -228,7 +205,6 @@ class Alien {
       this.attack = new PIXI.Sprite(this.resources[currentAttack.texture].texture);
       this.attack.width = 40;
       this.attack.height = 40;
-      this.attack.tint = 0xd74e09;
       this.attack.x = (this.alienContainer.width / 2) - (this.attack.width / 2);
       this.attack.y = 55;
       this.attack.alpha = 1;

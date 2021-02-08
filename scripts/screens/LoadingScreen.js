@@ -30,6 +30,11 @@ class LoadingScreen {
     this.loader.add('attackIconPaper', 'resources/images/attack-icon-paper.png');
     this.loader.add('attackIconScissors', 'resources/images/attack-icon-scissors.png');
 
+    // Defense Icons
+    this.loader.add('defenseIconRock', 'resources/images/defense-icon-rock.png');
+    this.loader.add('defenseIconPaper', 'resources/images/defense-icon-paper.png');
+    this.loader.add('defenseIconScissors', 'resources/images/defense-icon-scissors.png');
+
     // Storyboard stuff
     this.loader.add('backgroundStoryIntro1', 'resources/storyboard/background-story-intro1.jpg');
     this.loader.add('backgroundStoryIntro2', 'resources/storyboard/background-story-intro2.jpg');
@@ -55,6 +60,10 @@ class LoadingScreen {
     this.loader.add('soundDraw', 'resources/sounds/Magic2.wav');
     this.loader.add('soundLose', 'resources/sounds/Scream.wav');
     this.loader.add('soundNextLevel', 'resources/sounds/Find_Item.wav');
+
+    // Logos
+    this.loader.add('logoGithubGameoff', 'resources/images/github-gameoff-logo.png');
+    this.loader.add('logoNashIntergalactic', 'resources/images/logo-nash-intergalactic.png');
     /**
      * Alien Hits Player - Bomb_Explosion.wav
      * Human Hits Alien - Bomb_Explosion.wav

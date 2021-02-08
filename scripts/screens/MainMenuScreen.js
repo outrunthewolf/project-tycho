@@ -89,20 +89,36 @@ class MainMenuScreen {
       }));
     });
 
-    // How to play
-    const howButton = new ButtonLarge(this.resources, "How to Play");
-    howButton.x = (this.app.view.width / 2) - (playButton.width / 2);
-    howButton.y = playButton.y + 95;
-    this.menuHolder.addChild(howButton);
+    var githublogo = new PIXI.Sprite(this.resources.logoGithubGameoff.texture);
+    githublogo.width = 118;
+    githublogo.height = 63;
+    githublogo.x = 40;
+    githublogo.alpha = 0.6;
+    githublogo.y = this.app.view.height - githublogo.height - 30;
+    this.menuHolder.addChild(githublogo);
 
-    howButton.on('pointerdown', function (e) {
-      document.body.dispatchEvent(new CustomEvent("event:howtoplay", {
-        bubbles: true,
-        detail: {
-          scene: that
-        }
-      }));
-    });
+    var nashlogo = new PIXI.Sprite(this.resources.logoNashIntergalactic.texture);
+    nashlogo.width = 155;
+    nashlogo.height = 73;
+    nashlogo.alpha = 0.6;
+    nashlogo.x = githublogo.x + githublogo.width + 30;
+    nashlogo.y = this.app.view.height - nashlogo.height - 30;
+    this.menuHolder.addChild(nashlogo);
+
+    // // How to play
+    // const howButton = new ButtonLarge(this.resources, "How to Play");
+    // howButton.x = (this.app.view.width / 2) - (playButton.width / 2);
+    // howButton.y = playButton.y + 95;
+    // this.menuHolder.addChild(howButton);
+    //
+    // howButton.on('pointerdown', function (e) {
+    //   document.body.dispatchEvent(new CustomEvent("event:howtoplay", {
+    //     bubbles: true,
+    //     detail: {
+    //       scene: that
+    //     }
+    //   }));
+    // });
 
     // // Settings Button
     // const creditsButton = new ButtonLarge(this.resources, "Credits");
