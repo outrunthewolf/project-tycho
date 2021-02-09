@@ -4,7 +4,7 @@ class GameScene {
     this.stage = app.stage;
     this.app = app;
     this.backgroundHolder = { };
-    this.backgroundStoryHolder = { };
+    this.introScene = { };
     this.loader = loader;
     this.resources = resources;
     this.sound = sound;
@@ -34,9 +34,6 @@ class GameScene {
 
     // UI pieces
     this.pauseButton = { };
-    this.healthBarMask = { };
-    this.healthBar = { };
-    this.healthBarStep = 0; // Mask step
     this.radialContainer = { };
     this.radialDefenseY = 100;
 
@@ -106,8 +103,6 @@ class GameScene {
       if(this.gameOverDispatched == false) {
 
         // De-materialise all elements on screen
-        this.healthBar.visible = 0;
-        this.healthBarMask.visible = 0;
         this.pauseButton.visible = 0;
         this.gameOverDispatched = true;
         this.backgroundHolder.removeChild(this.radialContainer);
@@ -301,66 +296,6 @@ class GameScene {
     this.playerHumansSavedText.y = 70;
     this.backgroundHolder.addChild(this.playerHumansSavedText);
 
-    // player Health
-    this.healthBar = new PIXI.Sprite(this.resources.healthBar.texture);
-    this.healthBar.height = 25;
-    this.healthBar.width = 150;
-    this.healthBar.x = (this.app.view.width / 2) - (this.healthBar.width / 2);
-    this.healthBar.y = 730;
-    this.healthBar.vx = 0;
-    this.healthBar.vy = 0;
-    this.healthBar.alpha = 0;
-    //this.backgroundHolder.addChild(this.healthBar);
-
-    // player cover
-    this.healthBarMask = new PIXI.Graphics();
-    this.healthBarMask.lineStyle(0, 0xFF9600, 1);
-    this.healthBarMask.beginFill(0x000000);
-    this.healthBarMask.drawRect(0, 0, 1, 20);
-    this.healthBarMask.endFill();
-    this.healthBarMask.name = "cover";
-    this.healthBarMask.x = this.healthBar.x;
-    this.healthBarMask.y = 732;
-    this.healthBarMask.zIndex = 999;
-    this.healthBar.alpha = 0;
-    this.backgroundHolder.addChild(this.healthBarMask);
-
-    // Intro storyboard
-    this.backgroundStoryHolder = new PIXI.Container();
-
-    this.introStory1 = new PIXI.Sprite(this.resources.backgroundStoryIntro1.texture);
-    this.introStory1.y = 0;
-    this.introStory1.vx = 0;
-    this.introStory1.vy = 0;
-    this.introStory1.alpha = 0;
-    this.introStory1.x = (this.app.view.width / 2) - (this.introStory1.width / 2);
-    this.introStory1.height = this.app.view.height;
-    this.backgroundStoryHolder.addChild(this.introStory1);
-
-    this.introStory2 = new PIXI.Sprite(this.resources.backgroundStoryIntro2.texture);
-    this.introStory2.y = 0;
-    this.introStory2.vx = 0;
-    this.introStory2.vy = 0;
-    this.introStory2.alpha = 0;
-    this.introStory2.x = (this.app.view.width / 2) - (this.introStory2.width / 2);
-    this.introStory2.height = this.app.view.height;
-    this.backgroundStoryHolder.addChild(this.introStory2);
-
-    this.introStory3 = new PIXI.Sprite(this.resources.backgroundStoryIntro3.texture);
-    this.introStory3.y = 0;
-    this.introStory3.vx = 0;
-    this.introStory3.vy = 0;
-    this.introStory3.alpha = 0;
-    this.introStory3.x = (this.app.view.width / 2) - (this.introStory1.width / 2);
-    this.introStory3.height = this.app.view.height;
-    this.backgroundStoryHolder.addChild(this.introStory3);
-
-    this.skipButton = new ButtonSmallSkip(this.resources);
-    this.skipButton.x = this.app.view.width - 20 - this.skipButton.width;
-    this.skipButton.y = this.app.view.height - (20 + this.skipButton.height);
-    this.backgroundStoryHolder.addChild(this.skipButton);
-    this.backgroundHolder.addChild(this.backgroundStoryHolder);
-
     // Flash Spinner
     // Spinning Flash Thingy
     const flashTextures = [];
@@ -387,12 +322,8 @@ class GameScene {
     this.radialContainer = new Radial(this.app, this.loader, this.resources);
     this.backgroundHolder.addChild(this.radialContainer.getRenderable());
 
-    // Do other stuff
-    this.animate();
-
     // Fire event when we're ready to start everything
     document.body.addEventListener("playerAttackDropped", function (e) {
-      //gsap.to(that.radialContainer.getCurrentPlayerAttackObject(), that.shakeUpDownAnimation(that.radialContainer.getCurrentPlayerAttackObject().y));
       that.sound.playSound('soundHumanDropDefense');
     });
 
@@ -413,43 +344,35 @@ class GameScene {
       that.radialContainer.getRenderable().visible = true;
       that.radialContainer.ready = true;
     });
+
+    // Start the intro scene here
+    this.sound.soundToggle.visible = false;
+    this.introScene = new IntroScene(this.app, this.loader, this.resources);
+    this.backgroundHolder.addChild(this.introScene.getRenderable());
+
+    // Play the intor scene and callnack when done
+    this.introScene.play(function() {
+      that.animate();
+    });
   }
 
   /**
    *
    */
   animate() {
+    this.sound.soundToggle.visible = true;
 
     var originalPos = this.battleScene.y;
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});
     var that = this;
 
-    this.skipButton.on('pointerdown', function(event) {
-      tl.seek("startGame");
-    });
-
-    // Load a black screen
-    tl.to(this.introStory1, {alpha:1, duration: 1}).addLabel("intro1");
-    tl.to(this.introStory2, {alpha:1, duration: 1}, "=+3").addLabel("intro2");
-    tl.to(this.introStory3, {alpha: 1, duration: 1}, "=+4").addLabel("intro3");
-
-    tl.to(this.backgroundStoryHolder, {alpha: 0, duration: 4}, "=+4").addLabel("startGame");
-    tl.to(this.backgroundStoryHolder, {visible: false, duration: 0});
-    tl.to(this.skipButton, {visible: false, duration: 0, onComplete: function() {
-      that.backgroundStoryHolder.destroy();
-    }});
-    // Wait for button press
-
     tl.fromTo(this.player, {y: this.app.view.height + 700, alpha: 1}, {y: this.app.view.height - 120, alpha: 1, duration: 2});
-    //tl.to(this.healthBar, {y: this.app.view.height - 230 + this.player.height, alpha: 1});
-    //tl.to(this.healthBarMask, {y: this.app.view.height - 228 + this.player.height, alpha: 1});
     tl.fromTo(this.alien.getRenderable(), {y: 0, alpha: 0}, {y: 100, alpha: 1});
 
     tl.to(this.whiteFlash, {alpha: 1, duration: 0});
     tl.to(this.battleScene, {alpha: 1, duration: 0});
 
     tl.to(this.whiteFlash, {alpha: 0, duration: 1, onComplete: function() {
-      that.step = that.healthBar.width / that.playerHealth;
       that.battleScene.play();
       that.alien.getRenderable().getChildByName("alien").play();
 
@@ -529,10 +452,6 @@ class GameScene {
 
     var frame = this.player.currentFrame + 1;
     this.player.gotoAndStop(frame);
-
-    // change cover
-    //this.healthBarMask.width += this.step;
-    //this.healthBarMask.x = (this.app.view.width / 2) - (this.healthBar.width / 2) + this.healthBar.width - (this.healthBarMask.width) - 4;
 
     // Flash the player
     var tl = gsap.timeline({repeat: 0, repeatDelay: 1});

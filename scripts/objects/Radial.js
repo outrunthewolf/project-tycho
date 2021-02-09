@@ -19,21 +19,18 @@ class Radial {
         name: "rock",
         button: "Q",
         keyColour: "#a0dbe4",
-        rotation: 1,
         radialTexture: "radialIconRock",
         attackTexture: "defenseIconRock"
       },{
         name: "scissors",
         button: "W",
         keyColour: "#b2f8a2",
-        rotation: 0,
         radialTexture: "radialIconScissors",
         attackTexture: "defenseIconScissors"
       },{
         name: "paper",
         button: "E",
         keyColour: "#e399de",
-        rotation: -1,
         radialTexture: "radialIconPaper",
         attackTexture: "defenseIconPaper"
       }
@@ -71,7 +68,6 @@ class Radial {
       radial.interactive = true;
       radial.name = this.radialItems[i].name;
       radial.metaTexture = this.radialItems[i].attackTexture;
-      radial.metaRotation = this.radialItems[i].rotation;
       radial.x = (this.radialArc * i);
       radial.y = radialY - (radial.height / 2);
 
@@ -113,21 +109,18 @@ class Radial {
       document.addEventListener('keydown', function(event) {
         if (event.code == "KeyQ") {
           event.target.metaTexture = "defenseIconRock";
-          event.target.metaRotation = 2;
           event.target.name = "rock";
           that.hitDefense(event, app);
         }
 
         if (event.code == "KeyW") {
           event.target.metaTexture = "defenseIconScissors";
-          event.target.metaRotation = 0;
           event.target.name = "scissors";
           that.hitDefense(event, app);
         }
 
         if (event.code == "KeyE") {
           event.target.metaTexture = "defenseIconPaper";
-          event.target.metaRotation = -2;
           event.target.name = "paper";
           that.hitDefense(event, app);
         }

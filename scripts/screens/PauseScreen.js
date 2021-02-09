@@ -90,7 +90,8 @@ class PauseScreen {
         bubbles: true,
         detail: {
           scene: that,
-          level: that.playerLevel
+          level: that.playerLevel,
+          score: that.playerScore
         }
       }));
     });

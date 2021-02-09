@@ -51,8 +51,6 @@ loader.onComplete.once((loaderObject, assetsObject) => {
  */
 function loadScenes() {
   let menuScreen = new MainMenuScreen(app, loader, resources);
-  let creditScreen = new CreditScreen(app, loader, resources);
-  let howToPlayScreen = new RulesScreen(app, loader, resources);
   let gameOverScreen = new GameOverScreen(app, loader, resources);
   let pauseScreen = new PauseScreen(app, loader, resources);
   let powerUps = { };

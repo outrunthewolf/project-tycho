@@ -24,45 +24,28 @@ class Sound {
   renderControls() {
     var that = this;
 
-    this.soundToggle = new PIXI.Graphics();
-    this.soundToggle.lineStyle(4, 0xFF9600, 1);
-    this.soundToggle.beginFill(0xFF9600);
-    this.soundToggle.drawRect(0, 0, 50, 50);
-    this.soundToggle.endFill();
+    this.soundToggle = new PIXI.Sprite(resources.btnPrimarySmall.texture);
+    this.soundToggle.width = 50;
+    this.soundToggle.height = 50;
     this.soundToggle.x = 20;
     this.soundToggle.y = 20;
     this.soundToggle.zIndex = 99999;
     this.soundToggle.interactive = true;
     this.soundToggle.buttonMode = true;
-    this.soundToggle.alpha = 0.8;
-    this.soundToggle.mouseover = function (e) {
-      this.soundToggle.alpha = 1;
-    };
-    this.soundToggle.mouseout = function (e) {
-      that.soundToggle.alpha = 0.8;
-    };
-    this.soundToggle.mouseover = function (e) {
-      that.soundToggle.alpha = 1;
-    };
-    this.soundToggle.mouseout = function (e) {
-      that.soundToggle.alpha = 0.8;
-    };
     this.app.stage.addChild(this.soundToggle);
 
     var soundText = new PIXI.Text("🔇", new PIXI.TextStyle({
       fontFamily: "Futura",
-      fontSize: 30,
+      fontSize: 50,
       fill: "white"
     }));
-    soundText.x = (this.soundToggle.width / 2) - (soundText.width / 2);
-    soundText.y = (this.soundToggle.height / 2) - (soundText.height / 2);
+    soundText.x = 28;
+    soundText.y = 10;
     this.soundToggle.addChild(soundText);
 
     var originalTitlePos = this.soundToggle.y;
 
     this.soundToggle.click = function (e) {
-      that.soundToggle.alpha = 0.8;
-
       gsap.to(that.soundToggle, {
         keyframes: [{
             y: (originalTitlePos - 10),
@@ -86,16 +69,12 @@ class Sound {
         soundText.text = "🔈";
       }
     };
-    soundText.x = (this.soundToggle.width / 2) - (soundText.width / 2);
-    soundText.y = (this.soundToggle.height / 2) - (soundText.height / 2);
     this.soundToggle.addChild(soundText);
 
     var originalTitlePos = this.soundToggle.y;
     var that = this;
 
     this.soundToggle.click = function (e) {
-      that.soundToggle.alpha = 0.8;
-
       gsap.to(that.soundToggle, {
         keyframes: [{
             y: (originalTitlePos - 10),

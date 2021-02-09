@@ -18,7 +18,6 @@ class LoadingScreen {
     this.loader.add('avatarPaper', 'resources/images/radial-bg-paper.png');
     this.loader.add('avatarScissors', 'resources/images/scissors.png');
     this.loader.add('backgroundMoon', 'resources/images/background-moon.png');
-    this.loader.add('healthBar', 'resources/images/health-bar.png');
 
     // Radial icons
     this.loader.add('radialIconRock', 'resources/images/radial-icon-rock.png');
