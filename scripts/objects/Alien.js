@@ -221,4 +221,15 @@ class Alien {
   getRenderable() {
     return this.alienContainer;
   }
+
+  /**
+   *
+   */
+   getAttackSpeed() {
+     return this.levels_attack_array[this.current_level].speed;
+   }
+
+   setAttackSpeed(speed) {
+     this.levels_attack_array[this.current_level].speed = speed;
+   }
 }
