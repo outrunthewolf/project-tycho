@@ -115,10 +115,12 @@ function loadScenes() {
   // Event: Play Game
   document.body.addEventListener("event:playgame", function (e) {
     gameScene = new GameScene(app, loader, resources, sound);
-    //powerUps = new PowerUps(app, loader, resources);
     gameEventArray.push(gameScene);
-    //gameEventArray.push(powerUps);
     gameScene.render();
+
+    powerUps = new PowerUps(app, loader, resources, gameScene);
+    gameEventArray.push(powerUps);
+
     app.stage.sortChildren();
 
     // Play main music
