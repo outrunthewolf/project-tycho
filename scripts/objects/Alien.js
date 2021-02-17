@@ -211,6 +211,10 @@ class Alien {
       this.attack.name = currentAttack.name;
 
       this.alienContainer.addChild(this.attack);
+
+      document.body.dispatchEvent(new CustomEvent("alienAttackDropped", {
+        bubbles: true
+      }));
     }
   }
 

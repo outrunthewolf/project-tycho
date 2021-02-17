@@ -12,6 +12,7 @@ class Radial {
     this.enableKeyboard = true;
     this.radialArc = 87;
     this.animating = false;
+    this.disabled = false;
 
     //
     this.radialItems = [
@@ -92,21 +93,23 @@ class Radial {
         that.hitDefense(event, app);
       });
 
-      // Clear defense on clicking on nothing
-      app.renderer.plugins.interaction.on('pointerdown', function(event) {
-
-        if(that.attackRadial) {
-          that.attackRadial.destroy();
-          that.attackRadial = false;
-        }
-
-        that.currentPlayerAttack = "";
-      });
+      // // Clear defense on clicking on nothing
+      // app.renderer.plugins.interaction.on('pointerdown', function(event) {
+      //
+      //   if(that.attackRadial) {
+      //     that.attackRadial.destroy();
+      //     that.attackRadial = false;
+      //   }
+      //
+      //   that.currentPlayerAttack = "";
+      // });
     }
 
     // Keyboard events
     if(this.enableKeyboard == true) {
       document.addEventListener('keydown', function(event) {
+        if (that.disabled === true) return;
+
         if (event.code == "KeyQ") {
           event.target.metaTexture = "defenseIconRock";
           event.target.name = "rock";
@@ -147,7 +150,6 @@ class Radial {
     var that = this;
     var shakeAnimation = this.shakeUpDownAnimation(target.y);
     shakeAnimation.onStart = function() {
-      console.log("starting");
       that.animating = true;
     };
     shakeAnimation.onComplete = function() {
@@ -224,6 +226,18 @@ class Radial {
   */
   getCurrentPlayerAttackObject() {
     return this.currentPlayerAttackObject;
+  }
+
+  disable() {
+    this.disabled = true;
+    this.radialContainer.visible = false;
+    this.attackRadial.visible = false;
+  }
+
+  enable() {
+    this.disabled = false;
+    this.radialContainer.visible = true;
+    this.currentPlayerAttackObject.visible = true;
   }
 
   /**

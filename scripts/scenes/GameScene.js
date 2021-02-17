@@ -386,7 +386,7 @@ class GameScene {
    *
    */
   draw() {
-    document.body.dispatchEvent(new CustomEvent("draw", {
+    document.body.dispatchEvent(new CustomEvent("event:drawDefense", {
       bubbles: true
     }));
 
